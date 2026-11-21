@@ -63,7 +63,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ugurbuga.inspecto.Inspecto
 import com.ugurbuga.inspecto.InspectoApp
-import com.ugurbuga.inspecto.launchInspecto
 import com.ugurbuga.inspectodemo.shared.generated.resources.Res
 import com.ugurbuga.inspectodemo.shared.generated.resources.outfit
 import kotlinx.coroutines.launch
@@ -171,7 +170,7 @@ fun App() {
                     }
                 }
             },
-            onOpenInspecto = { launchInspecto() },
+            onOpenInspecto = { Inspecto.launch() },
             onManualLogClick = {
                 InspectoManualLogRunner.triggerManualLog()
             },

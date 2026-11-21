@@ -55,7 +55,7 @@ Add Inspecto dependency to your multiplatform module (`commonMain`):
 
 ```kotlin
 commonMain.dependencies {
-    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha12")
+    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha13")
 }
 ```
 
@@ -67,12 +67,12 @@ Wrap your root composable with `InspectoApp` and launch the inspector drawer/act
 
 ```kotlin
 import com.ugurbuga.inspecto.InspectoApp
-import com.ugurbuga.inspecto.launchInspecto
+import com.ugurbuga.inspecto.Inspecto
 
 @Composable
 fun App() {
     InspectoApp {
-        Button(onClick = { launchInspecto() }) {
+        Button(onClick = { Inspecto.launch() }) {
             Text("Open Inspecto Inspector")
         }
     }

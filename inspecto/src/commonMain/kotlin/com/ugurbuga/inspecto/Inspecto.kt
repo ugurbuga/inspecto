@@ -26,7 +26,8 @@ object Inspecto {
     }
 
     fun launch(context: Any? = null) {
-        launchInspecto(context)
+        setOpen(true)
+        triggerLaunchCallback()
     }
 
     fun dismiss() {

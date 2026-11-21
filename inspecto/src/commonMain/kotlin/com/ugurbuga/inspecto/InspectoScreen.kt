@@ -125,8 +125,12 @@ private fun InspectoScreenContent(
     val focusManager = androidx.compose.ui.platform.LocalFocusManager.current
     val keyboardController = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
 
-    BackHandler(enabled = selectedEntry != null) {
-        selectedEntry = null
+    BackHandler(enabled = true) {
+        if (selectedEntry != null) {
+            selectedEntry = null
+        } else {
+            onDismiss()
+        }
     }
 
     val filteredLogs = remember(logs, searchQuery, selectedFilters, filterMode) {

@@ -67,8 +67,11 @@ actual object InspectoNotification {
             }
         }
 
-        val intent = Intent(context, InspectoActivity::class.java).apply {
+        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra("OPEN_INSPECTO", true)
+        } ?: Intent().apply {
+            putExtra("OPEN_INSPECTO", true)
         }
         val pendingIntent = PendingIntent.getActivity(
             context,

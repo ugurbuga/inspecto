@@ -41,7 +41,7 @@ private class InspectoNotificationDelegate : NSObject(), UNUserNotificationCente
     ) {
         val actionId = didReceiveNotificationResponse.actionIdentifier
         if (actionId == UNNotificationDefaultActionIdentifier || actionId == "OPEN_ACTION") {
-            launchInspecto()
+            Inspecto.launch()
         } else if (actionId == "CLEAR_ACTION") {
             Inspecto.clear()
         }
