@@ -55,7 +55,7 @@ Add Inspecto dependency to your multiplatform module (`commonMain`):
 
 ```kotlin
 commonMain.dependencies {
-    implementation("com.ugurbuga:inspecto:1.0.0-alpha07")
+    implementation("com.ugurbuga:inspecto:1.0.0-alpha08")
 }
 ```
 

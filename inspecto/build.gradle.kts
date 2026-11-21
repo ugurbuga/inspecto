@@ -7,11 +7,11 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
-    `maven-publish`
+    alias(libs.plugins.mavenPublish)
 }
 
 group = "com.ugurbuga"
-version = "1.0.0-alpha07"
+version = "1.0.0-alpha08"
 
 compose.resources {
     publicResClass = true
@@ -78,4 +78,47 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(compose.uiTooling)
+}
+
+mavenPublishing {
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    signAllPublications()
+    coordinates("com.ugurbuga", "inspecto", "1.0.0-alpha08")
+
+    pom {
+        name.set("inspecto")
+        description.set("Kotlin Multiplatform Network Inspection Library")
+        url.set("https://github.com/ugurbuga/inspecto")
+        licenses {
+            license {
+                name.set("The Apache Software License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+        developers {
+            developer {
+                id.set("ugurbuga")
+                name.set("Ugur Buga")
+                email.set("ugurbuga@gmail.com")
+            }
+        }
+        scm {
+            connection.set("scm:git:github.com/ugurbuga/inspecto.git")
+            developerConnection.set("scm:git:ssh://github.com/ugurbuga/inspecto.git")
+            url.set("https://github.com/ugurbuga/inspecto")
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/ugurbuga/inspecto")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
