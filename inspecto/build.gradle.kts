@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.ugurbuga"
-version = "1.0.0-alpha08"
+version = "1.0.0-alpha09"
 
 compose.resources {
     publicResClass = true
@@ -70,8 +70,8 @@ kotlin {
             api(libs.androidx.lifecycle.runtimeCompose)
             api(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
-            compileOnly(libs.ktor.client.core)
-            compileOnly(libs.apollo.runtime)
+            api(libs.ktor.client.core)
+            api(libs.apollo.runtime)
         }
     }
 }
@@ -81,9 +81,9 @@ dependencies {
 }
 
 mavenPublishing {
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
-    signAllPublications()
-    coordinates("com.ugurbuga", "inspecto", "1.0.0-alpha08")
+    // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    // signAllPublications()
+    coordinates("com.ugurbuga", "inspecto", "1.0.0-alpha09")
 
     pom {
         name.set("inspecto")
