@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha10"
+version = "1.0.0-alpha11"
 
 compose.resources {
     publicResClass = true
@@ -83,7 +83,7 @@ dependencies {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto", "1.0.0-alpha10")
+    coordinates("io.github.ugurbuga", "inspecto", "1.0.0-alpha11")
 
     pom {
         name.set("inspecto")
