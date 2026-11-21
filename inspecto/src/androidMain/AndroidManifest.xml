@@ -3,17 +3,17 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application>
         <activity
-            android:name="io.github.ugurbuga.inspecto.InspectoActivity"
+            android:name="com.ugurbuga.inspecto.InspectoActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Material.NoActionBar"
             android:label="Inspecto Network Inspector" />
         <provider
-            android:name="io.github.ugurbuga.inspecto.InspectoInitProvider"
+            android:name="com.ugurbuga.inspecto.InspectoInitProvider"
             android:authorities="${applicationId}.inspectoinitprovider"
             android:exported="false"
             android:initOrder="100" />
         <receiver
-            android:name="io.github.ugurbuga.inspecto.InspectoClearReceiver"
+            android:name="com.ugurbuga.inspecto.InspectoClearReceiver"
             android:exported="false" />
     </application>
 </manifest>

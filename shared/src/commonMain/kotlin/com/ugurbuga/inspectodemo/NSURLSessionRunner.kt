@@ -1,4 +1,4 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
 expect fun performNSURLSessionTestRequest(url: String, onResult: (String) -> Unit)
 expect val isNSURLSessionSupported: Boolean

@@ -17,11 +17,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "io.github.ugurbuga.inspectodemo.MainKt"
+        mainClass = "com.ugurbuga.inspectodemo.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "io.github.ugurbuga.inspectodemo"
+            packageName = "com.ugurbuga.inspectodemo"
             packageVersion = "1.0.0"
         }
     }

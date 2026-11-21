@@ -1,7 +1,7 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
-import io.github.ugurbuga.inspectodemo.ui.SeriesStatus
-import io.github.ugurbuga.inspectodemo.util.getTodayLocalDate
+import com.ugurbuga.inspectodemo.ui.SeriesStatus
+import com.ugurbuga.inspectodemo.util.getTodayLocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

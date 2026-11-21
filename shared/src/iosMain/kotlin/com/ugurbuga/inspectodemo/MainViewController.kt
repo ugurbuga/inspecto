@@ -1,4 +1,4 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
 import androidx.compose.ui.window.ComposeUIViewController
 

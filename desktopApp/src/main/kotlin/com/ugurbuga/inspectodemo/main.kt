@@ -1,4 +1,4 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -7,7 +7,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
-import io.github.ugurbuga.inspectodemo.util.SettingsStorage
+import com.ugurbuga.inspectodemo.util.SettingsStorage
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter

@@ -1,4 +1,4 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
 actual fun performOkHttpTestRequest(url: String, onResult: (String) -> Unit) {
     onResult("OkHttp is supported on Android and Desktop JVM.")

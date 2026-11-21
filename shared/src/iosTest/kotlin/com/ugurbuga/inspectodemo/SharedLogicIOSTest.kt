@@ -1,4 +1,4 @@
-package io.github.ugurbuga.inspectodemo
+package com.ugurbuga.inspectodemo
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
