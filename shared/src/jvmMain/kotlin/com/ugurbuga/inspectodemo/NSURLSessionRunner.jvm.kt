@@ -1,4 +1,4 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
 actual val isNSURLSessionSupported: Boolean = false
 actual fun performNSURLSessionTestRequest(url: String, onResult: (String) -> Unit) {

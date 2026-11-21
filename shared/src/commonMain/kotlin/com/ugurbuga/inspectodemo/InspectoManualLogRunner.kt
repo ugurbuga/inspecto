@@ -1,6 +1,6 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.Inspecto
+import io.github.ugurbuga.inspecto.Inspecto
 
 object InspectoManualLogRunner {
     fun triggerManualLog(): String {

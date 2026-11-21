@@ -10,12 +10,12 @@ plugins {
     alias(libs.plugins.mavenPublish)
 }
 
-group = "com.ugurbuga"
-version = "1.0.0-alpha09"
+group = "io.github.ugurbuga"
+version = "1.0.0-alpha10"
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "com.ugurbuga.inspecto.generated.resources"
+    packageOfResClass = "io.github.ugurbuga.inspecto.generated.resources"
 }
 
 kotlin {
@@ -39,7 +39,7 @@ kotlin {
         binaries.executable()
     }
     android {
-       namespace = "com.ugurbuga.inspecto"
+       namespace = "io.github.ugurbuga.inspecto"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
        compilerOptions {
@@ -83,7 +83,7 @@ dependencies {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("com.ugurbuga", "inspecto", "1.0.0-alpha09")
+    coordinates("io.github.ugurbuga", "inspecto", "1.0.0-alpha10")
 
     pom {
         name.set("inspecto")

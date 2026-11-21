@@ -1,6 +1,6 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.logNSURLSessionDataTask
+import io.github.ugurbuga.inspecto.logNSURLSessionDataTask
 import platform.Foundation.*
 
 actual val isNSURLSessionSupported: Boolean = true

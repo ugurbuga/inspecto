@@ -1,6 +1,6 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.InspectoOkHttpLoggingInterceptor
+import io.github.ugurbuga.inspecto.InspectoOkHttpLoggingInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 

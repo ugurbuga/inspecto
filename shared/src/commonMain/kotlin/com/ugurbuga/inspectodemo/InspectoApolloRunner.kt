@@ -1,4 +1,4 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Adapter
@@ -8,7 +8,7 @@ import com.apollographql.apollo.api.ObjectType
 import com.apollographql.apollo.api.Query
 import com.apollographql.apollo.api.json.JsonReader
 import com.apollographql.apollo.api.json.JsonWriter
-import com.ugurbuga.inspecto.InspectoApolloInterceptor
+import io.github.ugurbuga.inspecto.InspectoApolloInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

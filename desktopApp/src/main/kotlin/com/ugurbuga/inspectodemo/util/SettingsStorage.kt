@@ -1,4 +1,4 @@
-package com.ugurbuga.inspectodemo.util
+package io.github.ugurbuga.inspectodemo.util
 
 import java.io.File
 import java.util.Properties

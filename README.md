@@ -55,7 +55,7 @@ Add Inspecto dependency to your multiplatform module (`commonMain`):
 
 ```kotlin
 commonMain.dependencies {
-    implementation("com.ugurbuga:inspecto:1.0.0-alpha09")
+    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha10")
 }
 ```
 
@@ -66,8 +66,8 @@ commonMain.dependencies {
 Wrap your root composable with `InspectoApp` and launch the inspector drawer/activity anywhere:
 
 ```kotlin
-import com.ugurbuga.inspecto.InspectoApp
-import com.ugurbuga.inspecto.launchInspecto
+import io.github.ugurbuga.inspecto.InspectoApp
+import io.github.ugurbuga.inspecto.launchInspecto
 
 @Composable
 fun App() {
@@ -103,7 +103,7 @@ InspectoApp(fontFamily = FontFamily(Font(Res.font.my_custom_font))) {
 Install `InspectoKtorLogging` plugin into your Ktor `HttpClient`:
 
 ```kotlin
-import com.ugurbuga.inspecto.InspectoKtorLogging
+import io.github.ugurbuga.inspecto.InspectoKtorLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -123,7 +123,7 @@ val httpClient = HttpClient {
 Add `InspectoOkHttpLoggingInterceptor` to your `OkHttpClient.Builder`:
 
 ```kotlin
-import com.ugurbuga.inspecto.InspectoOkHttpLoggingInterceptor
+import io.github.ugurbuga.inspecto.InspectoOkHttpLoggingInterceptor
 import okhttp3.OkHttpClient
 
 val okHttpClient = OkHttpClient.Builder()
@@ -176,7 +176,7 @@ Add `InspectoApolloInterceptor` to your `ApolloClient.Builder`, explicitly provi
 
 ```kotlin
 import com.apollographql.apollo.ApolloClient
-import com.ugurbuga.inspecto.InspectoApolloInterceptor
+import io.github.ugurbuga.inspecto.InspectoApolloInterceptor
 
 val apolloClient = ApolloClient.Builder()
     .serverUrl("https://rickandmortyapi.com/graphql")
@@ -191,7 +191,7 @@ val apolloClient = ApolloClient.Builder()
 For custom protocols, WebSockets, or third-party SDKs:
 
 ```kotlin
-import com.ugurbuga.inspecto.Inspecto
+import io.github.ugurbuga.inspecto.Inspecto
 
 Inspecto.addLog(
     url = "https://api.inspecto.local/v1/custom-action",

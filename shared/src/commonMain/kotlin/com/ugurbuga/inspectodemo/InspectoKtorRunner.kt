@@ -1,7 +1,7 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.Inspecto
-import com.ugurbuga.inspecto.InspectoKtorLogging
+import io.github.ugurbuga.inspecto.Inspecto
+import io.github.ugurbuga.inspecto.InspectoKtorLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get

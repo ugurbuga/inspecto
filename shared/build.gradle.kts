@@ -30,7 +30,7 @@ kotlin {
         binaries.executable()
     }
     android {
-       namespace = "com.ugurbuga.inspectodemo.shared"
+       namespace = "io.github.ugurbuga.inspectodemo.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
        compilerOptions {
@@ -105,5 +105,5 @@ dependencies {
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "com.ugurbuga.inspectodemo.shared.generated.resources"
+    packageOfResClass = "io.github.ugurbuga.inspectodemo.shared.generated.resources"
 }

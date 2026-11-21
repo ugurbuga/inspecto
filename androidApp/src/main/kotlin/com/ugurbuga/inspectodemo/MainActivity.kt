@@ -1,4 +1,4 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
 import android.Manifest
 import android.content.pm.PackageManager

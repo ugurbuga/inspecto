@@ -1,10 +1,10 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspectodemo.data.ChannelItem
-import com.ugurbuga.inspectodemo.data.SeriesItem
-import com.ugurbuga.inspectodemo.data.SeriesRepository
-import com.ugurbuga.inspectodemo.domain.SeriesViewModel
-import com.ugurbuga.inspectodemo.util.CryptoUtils
+import io.github.ugurbuga.inspectodemo.data.ChannelItem
+import io.github.ugurbuga.inspectodemo.data.SeriesItem
+import io.github.ugurbuga.inspectodemo.data.SeriesRepository
+import io.github.ugurbuga.inspectodemo.domain.SeriesViewModel
+import io.github.ugurbuga.inspectodemo.util.CryptoUtils
 import kotlinx.datetime.DayOfWeek
 import kotlin.test.Test
 import kotlin.test.assertEquals

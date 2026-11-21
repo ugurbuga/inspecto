@@ -1,4 +1,4 @@
-package com.ugurbuga.inspectodemo
+package io.github.ugurbuga.inspectodemo
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -61,11 +61,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ugurbuga.inspecto.Inspecto
-import com.ugurbuga.inspecto.InspectoApp
-import com.ugurbuga.inspecto.launchInspecto
-import com.ugurbuga.inspectodemo.shared.generated.resources.Res
-import com.ugurbuga.inspectodemo.shared.generated.resources.outfit
+import io.github.ugurbuga.inspecto.Inspecto
+import io.github.ugurbuga.inspecto.InspectoApp
+import io.github.ugurbuga.inspecto.launchInspecto
+import io.github.ugurbuga.inspectodemo.shared.generated.resources.Res
+import io.github.ugurbuga.inspectodemo.shared.generated.resources.outfit
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 

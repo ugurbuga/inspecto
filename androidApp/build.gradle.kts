@@ -22,11 +22,11 @@ dependencies {
 }
 
 android {
-    namespace = "com.ugurbuga.inspectodemo"
+    namespace = "io.github.ugurbuga.inspectodemo"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.ugurbuga.inspectodemo"
+        applicationId = "io.github.ugurbuga.inspectodemo"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
