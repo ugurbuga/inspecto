@@ -10,13 +10,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import com.ugurbuga.inspecto.InspectoLogEntry
 import com.ugurbuga.inspecto.generated.resources.Res
+import com.ugurbuga.inspecto.generated.resources.avg_duration
+import com.ugurbuga.inspecto.generated.resources.copy_button_description
 import com.ugurbuga.inspecto.generated.resources.copy_curl
+import com.ugurbuga.inspecto.generated.resources.detail_host
+import com.ugurbuga.inspecto.generated.resources.detail_path
+import com.ugurbuga.inspecto.generated.resources.detail_response_size
+import com.ugurbuga.inspecto.generated.resources.detail_status_code
+import com.ugurbuga.inspecto.generated.resources.detail_tag
+import com.ugurbuga.inspecto.generated.resources.detail_timestamp
+import com.ugurbuga.inspecto.generated.resources.detail_url
 import com.ugurbuga.inspecto.generated.resources.overview_details
 import com.ugurbuga.inspecto.generated.resources.ic_content_copy
 import com.ugurbuga.inspecto.ui.theme.InspectoLightColorScheme
@@ -75,7 +83,7 @@ internal fun OverviewTabContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "URL",
+                            text = stringResource(Res.string.detail_url),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
@@ -86,7 +94,7 @@ internal fun OverviewTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_content_copy),
-                                contentDescription = "Copy URL",
+                                contentDescription = stringResource(Res.string.copy_button_description),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -131,22 +139,22 @@ internal fun OverviewTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_content_copy),
-                                contentDescription = "Copy Overview Details",
+                                contentDescription = stringResource(Res.string.copy_button_description),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
                     }
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f))
-                    DetailRow("Host", entry.host, onToast)
-                    DetailRow("Path", entry.path, onToast)
-                    DetailRow("Status Code", "${entry.statusCode}", onToast)
-                    DetailRow("Duration (Latency)", "${entry.durationMs} ms", onToast)
-                    DetailRow("Response Size", entry.formattedSize, onToast)
+                    DetailRow(stringResource(Res.string.detail_host), entry.host, onToast)
+                    DetailRow(stringResource(Res.string.detail_path), entry.path, onToast)
+                    DetailRow(stringResource(Res.string.detail_status_code), "${entry.statusCode}", onToast)
+                    DetailRow(stringResource(Res.string.avg_duration), "${entry.durationMs} ms", onToast)
+                    DetailRow(stringResource(Res.string.detail_response_size), entry.formattedSize, onToast)
                     if (entry.tag.isNotBlank()) {
-                        DetailRow("Tag", entry.tag, onToast)
+                        DetailRow(stringResource(Res.string.detail_tag), entry.tag, onToast)
                     }
-                    DetailRow("Timestamp", formattedTimestamp, onToast)
+                    DetailRow(stringResource(Res.string.detail_timestamp), formattedTimestamp, onToast)
                 }
             }
 

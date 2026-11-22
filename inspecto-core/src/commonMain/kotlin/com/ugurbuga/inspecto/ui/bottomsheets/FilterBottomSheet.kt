@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ugurbuga.inspecto.Inspecto
+import com.ugurbuga.inspecto.InspectoFilterMode
 import com.ugurbuga.inspecto.generated.resources.Res
 import com.ugurbuga.inspecto.generated.resources.apply_filters
 import com.ugurbuga.inspecto.generated.resources.combination_mode
@@ -102,10 +103,10 @@ internal fun FilterBottomSheet(
                             .padding(4.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        listOf("AND", "OR").forEach { mode ->
-                            val selected = tempMode == mode
+                        InspectoFilterMode.entries.forEach { mode ->
+                            val selected = tempMode == mode.key
                             Surface(
-                                onClick = { tempMode = mode },
+                                onClick = { tempMode = mode.key },
                                 shape = RoundedCornerShape(4.dp),
                                 color = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent,
                                 modifier = Modifier
@@ -114,7 +115,7 @@ internal fun FilterBottomSheet(
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
-                                        text = if (mode == "AND") stringResource(Res.string.mode_and_desc) else stringResource(Res.string.mode_or_desc),
+                                        text = if (mode == InspectoFilterMode.AND) stringResource(Res.string.mode_and_desc) else stringResource(Res.string.mode_or_desc),
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
                                         color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant

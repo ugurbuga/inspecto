@@ -13,15 +13,13 @@ fun InspectOverlay(
     fontFamily: FontFamily? = null,
     content: @Composable () -> Unit
 ) {
-    if (fontFamily != null) {
-        Inspecto.customFontFamily = fontFamily
-    }
     val isOpen by Inspecto.isInspectoOpen.collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         content()
         if (isOpen) {
             InspectoScreen(
                 onDismiss = { Inspecto.dismiss() },
+                fontFamily = fontFamily,
                 modifier = Modifier.fillMaxSize()
             )
         }

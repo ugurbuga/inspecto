@@ -47,7 +47,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.ugurbuga.inspecto.Inspecto
 import com.ugurbuga.inspecto.InspectoJsonSyntaxHighlighter
 import com.ugurbuga.inspecto.generated.resources.Res
+import com.ugurbuga.inspecto.generated.resources.close_search_description
+import com.ugurbuga.inspecto.generated.resources.copy_button_description
+import com.ugurbuga.inspecto.generated.resources.decrease_font_description
 import com.ugurbuga.inspecto.generated.resources.empty_body
+import com.ugurbuga.inspecto.generated.resources.expand_description
 import com.ugurbuga.inspecto.generated.resources.formatting_payload
 import com.ugurbuga.inspecto.generated.resources.ic_add
 import com.ugurbuga.inspecto.generated.resources.ic_close
@@ -56,6 +60,10 @@ import com.ugurbuga.inspecto.generated.resources.ic_keyboard_arrow_down
 import com.ugurbuga.inspecto.generated.resources.ic_keyboard_arrow_up
 import com.ugurbuga.inspecto.generated.resources.ic_remove
 import com.ugurbuga.inspecto.generated.resources.ic_search
+import com.ugurbuga.inspecto.generated.resources.increase_font_description
+import com.ugurbuga.inspecto.generated.resources.next_match_description
+import com.ugurbuga.inspecto.generated.resources.previous_match_description
+import com.ugurbuga.inspecto.generated.resources.search_button_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import com.ugurbuga.inspecto.ui.components.noRippleClickable
@@ -162,7 +170,7 @@ internal fun HeadersAndBodyTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_content_copy),
-                                contentDescription = "Copy Query Parameters",
+                                contentDescription = stringResource(Res.string.copy_button_description),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -225,7 +233,7 @@ internal fun HeadersAndBodyTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_content_copy),
-                                contentDescription = "Copy Headers",
+                                contentDescription = stringResource(Res.string.copy_button_description),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -289,7 +297,7 @@ internal fun HeadersAndBodyTabContent(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_search),
-                            contentDescription = "Search in body",
+                            contentDescription = stringResource(Res.string.search_button_description),
                             tint = if (isSearchOpen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(16.dp)
                         )
@@ -304,7 +312,7 @@ internal fun HeadersAndBodyTabContent(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_remove),
-                            contentDescription = "Decrease Font Size",
+                            contentDescription = stringResource(Res.string.decrease_font_description),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -326,7 +334,7 @@ internal fun HeadersAndBodyTabContent(
                     ) {
                         Icon(
                             painter = painterResource(Res.drawable.ic_add),
-                            contentDescription = "Increase Font Size",
+                            contentDescription = stringResource(Res.string.increase_font_description),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -404,7 +412,7 @@ internal fun HeadersAndBodyTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_keyboard_arrow_up),
-                                contentDescription = "Previous Match",
+                                contentDescription = stringResource(Res.string.previous_match_description),
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -421,7 +429,7 @@ internal fun HeadersAndBodyTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_keyboard_arrow_down),
-                                contentDescription = "Next Match",
+                                contentDescription = stringResource(Res.string.next_match_description),
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -436,7 +444,7 @@ internal fun HeadersAndBodyTabContent(
                         ) {
                             Icon(
                                 painter = painterResource(Res.drawable.ic_close),
-                                contentDescription = "Close Search",
+                                contentDescription = stringResource(Res.string.close_search_description),
                                 modifier = Modifier.size(16.dp)
                             )
                         }

@@ -12,6 +12,7 @@
     <string name="method_options" translatable="false">OPTIONS</string>
     <string name="method_head" translatable="false">HEAD</string>
     <string name="status_2xx" translatable="false">2XX</string>
+    <string name="detail_url" translatable="false">URL</string>
 
     <!-- ======================================== -->
     <!-- Header & Stats Titles                    -->
@@ -56,6 +57,14 @@
     <string name="request_tab" translatable="false">REQUEST</string>
     <string name="response_tab" translatable="false">RESPONSE</string>
     <string name="overview_details">Overview Details</string>
+    <string name="section_request_title">Request</string>
+    <string name="section_response_title">Response</string>
+    <string name="detail_host">Host</string>
+    <string name="detail_path">Path</string>
+    <string name="detail_status_code">Status Code</string>
+    <string name="detail_response_size">Response Size</string>
+    <string name="detail_tag">Tag</string>
+    <string name="detail_timestamp">Timestamp</string>
     <string name="copy_curl">Copy cURL</string>
     <string name="copy_url">Copy URL</string>
     <string name="formatting_payload">Formatting payload...</string>
@@ -79,6 +88,8 @@
     <string name="next_match_description">Next Match</string>
     <string name="close_search_description">Close Search</string>
     <string name="expand_description">Expand</string>
+    <string name="decrease_font_description">Decrease Font Size</string>
+    <string name="increase_font_description">Increase Font Size</string>
 
     <!-- ======================================== -->
     <!-- Toast & Feedback Messages               -->

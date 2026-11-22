@@ -1,6 +1,5 @@
 package com.ugurbuga.inspecto
 
-import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,7 +7,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 
 object Inspecto {
-    var customFontFamily: FontFamily? = null
 
     private const val MAX_LOG_CAPACITY = 100
     private val jsonFormatter = Json { prettyPrint = true; ignoreUnknownKeys = true }

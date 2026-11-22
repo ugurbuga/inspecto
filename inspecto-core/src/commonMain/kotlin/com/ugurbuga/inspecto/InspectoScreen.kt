@@ -35,7 +35,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.ugurbuga.inspecto.ui.theme.getInspectoFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -87,13 +89,14 @@ private fun entryMatchesFilter(entry: InspectoLogEntry, filter: String): Boolean
 internal fun InspectoScreen(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    forceDarkTheme: Boolean? = null
+    forceDarkTheme: Boolean? = null,
+    fontFamily: FontFamily? = null
 ) {
     val systemDark = isSystemInDarkTheme()
     var isDarkThemeOverride by remember { mutableStateOf<Boolean?>(forceDarkTheme) }
     val isDark = isDarkThemeOverride ?: systemDark
 
-    InspectoTheme(isDarkTheme = isDark) {
+    InspectoTheme(isDarkTheme = isDark, fontFamily = fontFamily ?: getInspectoFontFamily()) {
         InspectoScreenContent(
             onDismiss = onDismiss,
             isDarkTheme = isDark,
