@@ -1,4 +1,4 @@
-name: Publish Inspecto CMP Library to GitHub Packages
+name: Publish Inspecto CMP Libraries to GitHub Packages
 
 on:
   release:
@@ -30,4 +30,4 @@ jobs:
           ORG_GRADLE_PROJECT_gpr_user: ${{ github.actor }}
           ORG_GRADLE_PROJECT_gpr_key: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./gradlew :inspecto:publishAllPublicationsToGitHubPackagesRepository -Pgpr.user=${{ github.actor }} -Pgpr.key=${{ secrets.GITHUB_TOKEN }} --no-configuration-cache -x test -x lint
+          ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pgpr.user=${{ github.actor }} -Pgpr.key=${{ secrets.GITHUB_TOKEN }} --no-configuration-cache -x test -x lint
