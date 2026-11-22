@@ -56,16 +56,16 @@ Add Inspecto dependency to your multiplatform module (`commonMain`):
 ```kotlin
 commonMain.dependencies {
     // Core UI, models & storage (Required)
-    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha14")
+    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha13")
 
     // Optional Network Add-ons (Add only what you use)
-    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha14")
-    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha14")
-    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha14")
+    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha13")
+    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha13")
+    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha13")
 }
 
 iosMain.dependencies {
-    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha14")
+    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha13")
 }
 ```
 
