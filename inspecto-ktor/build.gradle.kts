@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha14"
+version = "1.0.0-alpha16"
 
 kotlin {
     jvm()
@@ -31,7 +31,7 @@ kotlin {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto-ktor", "1.0.0-alpha15")
+    coordinates("io.github.ugurbuga", "inspecto-ktor", "1.0.0-alpha16")
 
     pom {
         name.set("Inspecto Ktor")

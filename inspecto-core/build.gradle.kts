@@ -83,7 +83,7 @@ dependencies {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto-core", "1.0.0-alpha15")
+    coordinates("io.github.ugurbuga", "inspecto-core", "1.0.0-alpha16")
 
     pom {
         name.set("inspecto-core")
