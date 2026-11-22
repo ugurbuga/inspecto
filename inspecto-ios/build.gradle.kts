@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha13"
+version = "1.0.0-alpha14"
 
 kotlin {
     iosArm64()
@@ -12,7 +12,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(project(":inspecto"))
+            api(project(":inspecto-core"))
         }
     }
 }
@@ -20,7 +20,7 @@ kotlin {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto-ios", "1.0.0-alpha13")
+    coordinates("io.github.ugurbuga", "inspecto-ios", "1.0.0-alpha14")
 
     pom {
         name.set("Inspecto iOS")

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha13"
+version = "1.0.0-alpha14"
 
 kotlin {
     jvm()
@@ -22,7 +22,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(project(":inspecto"))
+            api(project(":inspecto-core"))
             api(libs.ktor.client.core)
         }
     }
@@ -31,7 +31,7 @@ kotlin {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto-ktor", "1.0.0-alpha13")
+    coordinates("io.github.ugurbuga", "inspecto-ktor", "1.0.0-alpha14")
 
     pom {
         name.set("Inspecto Ktor")

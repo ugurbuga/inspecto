@@ -33,7 +33,7 @@ plugins {
 
 include(":androidApp")
 include(":desktopApp")
-include(":inspecto")
+include(":inspecto-core")
 include(":inspecto-ktor")
 include(":inspecto-okhttp")
 include(":inspecto-apollo")

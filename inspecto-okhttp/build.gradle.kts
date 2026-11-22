@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha13"
+version = "1.0.0-alpha14"
 
 kotlin {
     jvm()
@@ -25,7 +25,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(project(":inspecto"))
+            api(project(":inspecto-core"))
         }
         androidMain.dependencies {
             api(libs.okhttp)
@@ -37,7 +37,7 @@ kotlin {
 }
 
 mavenPublishing {
-    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha13")
+    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha14")
 
     pom {
         name.set("Inspecto OkHttp")

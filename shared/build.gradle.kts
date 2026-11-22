@@ -57,7 +57,7 @@ kotlin {
             api(libs.okhttp)
         }
         commonMain.dependencies {
-            api(project(":inspecto"))
+            api(project(":inspecto-core"))
             api(project(":inspecto-ktor"))
             api(project(":inspecto-okhttp"))
             api(project(":inspecto-apollo"))

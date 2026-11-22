@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ugurbuga.inspecto.Inspecto
-import com.ugurbuga.inspecto.InspectoApp
+import com.ugurbuga.inspecto.InspectOverlay
 import com.ugurbuga.inspectodemo.shared.generated.resources.Res
 import com.ugurbuga.inspectodemo.shared.generated.resources.outfit
 import kotlinx.coroutines.launch
@@ -76,7 +76,7 @@ fun App() {
     }
 
     val outfitFont = FontFamily(Font(Res.font.outfit))
-    InspectoApp(fontFamily = outfitFont) {
+    InspectOverlay(fontFamily = outfitFont) {
         var isLoading by remember { mutableStateOf(false) }
 
         InspectoDemoContent(

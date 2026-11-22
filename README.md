@@ -51,21 +51,21 @@
 
 ### 1. Installation
 
-Add Inspecto dependency to your multiplatform module (`commonMain`):
+Add Inspecto dependencies to your multiplatform module (`commonMain` & `iosMain`):
 
 ```kotlin
 commonMain.dependencies {
     // Core UI, models & storage (Required)
-    implementation("io.github.ugurbuga:inspecto:1.0.0-alpha13")
+    implementation("io.github.ugurbuga:inspecto-core:1.0.0-alpha14")
 
     // Optional Network Add-ons (Add only what you use)
-    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha13")
-    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha13")
-    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha13")
+    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha14")
+    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha14")
+    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha14")
 }
 
 iosMain.dependencies {
-    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha13")
+    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha14")
 }
 ```
 
@@ -73,15 +73,15 @@ iosMain.dependencies {
 
 ### 2. Launching Inspecto UI
 
-Wrap your root composable with `InspectoApp` and launch the inspector drawer/activity anywhere:
+Wrap your root composable with `InspectOverlay` and launch the inspector anywhere:
 
 ```kotlin
-import com.ugurbuga.inspecto.InspectoApp
+import com.ugurbuga.inspecto.InspectOverlay
 import com.ugurbuga.inspecto.Inspecto
 
 @Composable
 fun App() {
-    InspectoApp {
+    InspectOverlay {
         Button(onClick = { Inspecto.launch() }) {
             Text("Open Inspecto Inspector")
         }
@@ -93,14 +93,14 @@ fun App() {
 
 ### 3. Custom Font Configuration (Optional)
 
-Inspecto is font-agnostic by default (`FontFamily.Default`). You can supply your own custom font globally or via `InspectoApp`:
+Inspecto is font-agnostic by default (`FontFamily.Default`). You can supply your own custom font globally or via `InspectOverlay`:
 
 ```kotlin
 // Option A: Global assignment
 Inspecto.customFontFamily = FontFamily(Font(Res.font.my_custom_font))
 
 // Option B: Composable parameter
-InspectoApp(fontFamily = FontFamily(Font(Res.font.my_custom_font))) {
+InspectOverlay(fontFamily = FontFamily(Font(Res.font.my_custom_font))) {
     // App UI
 }
 ```
@@ -223,7 +223,7 @@ Inspecto.addLog(
 - **Advanced Filtering & Search**: Filter requests by HTTP Method (`GET`, `POST`, `PUT`, `DELETE`, `GraphQL`), Status (`2XX`, `4XX`, `5XX`), or search by URL/tag.
 - **JSON Beautifier**: Automatically pretty-prints and indents JSON request and response bodies.
 - **cURL Export**: One-tap copy cURL command for any captured network transaction.
-- **Theme-Aware Status Bar**: Dynamically synchronizes Android system status bar color with the app's topbar/surface color.
+- **Theme-Aware Status Bar**: Dynamically synchronizes Android system status bar icon contrast with theme appearance.
 
 ---
 
