@@ -7,13 +7,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.ugurbuga.inspecto.ui.theme.InspectoColors
 
 actual object InspectoNotification {
     private const val CHANNEL_ID = "inspecto_network_calls_channel"
@@ -101,7 +102,7 @@ actual object InspectoNotification {
                 val spannable = SpannableString(text)
 
                 // 1. Color symbol icon (Green for success, Red for error)
-                val symbolColor = if (req.isSuccess) Color.parseColor("#10B981") else Color.parseColor("#EF4444")
+                val symbolColor = if (req.isSuccess) InspectoColors.StatusSuccess2xx.toArgb() else InspectoColors.StatusError4xx5xx.toArgb()
                 spannable.setSpan(
                     ForegroundColorSpan(symbolColor),
                     0,
@@ -111,9 +112,9 @@ actual object InspectoNotification {
 
                 // 2. Color status code
                 val statusColor = when {
-                    req.statusCode in 200..299 -> Color.parseColor("#10B981")
-                    req.statusCode in 300..399 -> Color.parseColor("#F59E0B")
-                    else -> Color.parseColor("#EF4444")
+                    req.statusCode in 200..299 -> InspectoColors.StatusSuccess2xx.toArgb()
+                    req.statusCode in 300..399 -> InspectoColors.StatusRedirect3xx.toArgb()
+                    else -> InspectoColors.StatusError4xx5xx.toArgb()
                 }
                 val statusStr = "${req.statusCode}"
                 val statusIndex = text.indexOf(statusStr)
@@ -128,14 +129,14 @@ actual object InspectoNotification {
 
                 // 3. Color method (Matching in-app InspectoColors)
                 val methodColor = when (req.method.uppercase()) {
-                    InspectoMethod.GET -> Color.parseColor("#0284C7")
-                    InspectoMethod.POST -> Color.parseColor("#0EA5E9")
-                    InspectoMethod.PUT -> Color.parseColor("#8B5CF6")
-                    InspectoMethod.DELETE -> Color.parseColor("#EC4899")
-                    InspectoMethod.PATCH -> Color.parseColor("#6366F1")
-                    InspectoMethod.OPTIONS -> Color.parseColor("#475569")
-                    InspectoMethod.HEAD -> Color.parseColor("#334155")
-                    else -> Color.parseColor("#6B7280")
+                    InspectoMethod.GET -> InspectoColors.MethodGet.toArgb()
+                    InspectoMethod.POST -> InspectoColors.MethodPost.toArgb()
+                    InspectoMethod.PUT -> InspectoColors.MethodPut.toArgb()
+                    InspectoMethod.DELETE -> InspectoColors.MethodDelete.toArgb()
+                    InspectoMethod.PATCH -> InspectoColors.MethodPatch.toArgb()
+                    InspectoMethod.OPTIONS -> InspectoColors.MethodOptions.toArgb()
+                    InspectoMethod.HEAD -> InspectoColors.MethodHead.toArgb()
+                    else -> InspectoColors.MethodOptions.toArgb()
                 }
                 val methodIndex = text.indexOf(req.method)
                 if (methodIndex >= 0) {
