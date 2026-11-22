@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha13"
+version = "1.0.0-alpha14"
 
 compose.resources {
     publicResClass = true
@@ -83,11 +83,11 @@ dependencies {
 mavenPublishing {
     // publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
-    coordinates("io.github.ugurbuga", "inspecto", "1.0.0-alpha13")
+    coordinates("io.github.ugurbuga", "inspecto", "1.0.0-alpha14")
 
     pom {
-        name.set("inspecto")
-        description.set("Kotlin Multiplatform Network Inspection Library")
+        name.set("inspecto-core")
+        description.set("Kotlin Multiplatform Network Inspection Library - Core")
         url.set("https://github.com/ugurbuga/inspecto")
         licenses {
             license {

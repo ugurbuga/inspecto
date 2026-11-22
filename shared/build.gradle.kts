@@ -58,6 +58,9 @@ kotlin {
         }
         commonMain.dependencies {
             api(project(":inspecto"))
+            api(project(":inspecto-ktor"))
+            api(project(":inspecto-okhttp"))
+            api(project(":inspecto-apollo"))
             api(compose.runtime)
             api(compose.foundation)
             api(compose.material3)
@@ -78,6 +81,7 @@ kotlin {
             api(libs.coil.svg)
         }
         iosMain.dependencies {
+            api(project(":inspecto-ios"))
             api(libs.ktor.client.darwin)
         }
         jvmMain.dependencies {

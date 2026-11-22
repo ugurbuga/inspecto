@@ -68,16 +68,13 @@ actual object InspectoNotification {
             }
         }
 
-        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            putExtra("OPEN_INSPECTO", true)
-        } ?: Intent().apply {
-            putExtra("OPEN_INSPECTO", true)
+        val openIntent = Intent(context, InspectoNotificationReceiver::class.java).apply {
+            action = "com.ugurbuga.inspecto.ACTION_OPEN"
         }
-        val pendingIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
-            intent,
+            openIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 

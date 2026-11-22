@@ -8,6 +8,9 @@
             android:exported="false"
             android:initOrder="100" />
         <receiver
+            android:name="com.ugurbuga.inspecto.InspectoNotificationReceiver"
+            android:exported="false" />
+        <receiver
             android:name="com.ugurbuga.inspecto.InspectoClearReceiver"
             android:exported="false" />
     </application>
