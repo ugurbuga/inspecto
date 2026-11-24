@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ugurbuga.inspecto.Inspecto
 import com.ugurbuga.inspecto.InspectoFilterMode
+import com.ugurbuga.inspecto.InspectoStatusFilter
 import com.ugurbuga.inspecto.generated.resources.Res
 import com.ugurbuga.inspecto.generated.resources.apply_filters
 import com.ugurbuga.inspecto.generated.resources.combination_mode
@@ -45,8 +46,14 @@ internal fun FilterBottomSheet(
     val dynamicMethods = remember(logs) { logs.map { it.method.uppercase() }.distinct().sorted() }
     val dynamicTags = remember(logs) { logs.map { it.tag }.filter { it.isNotBlank() && it != "HTTP" }.distinct().sorted() }
 
-    val availableFilters = remember(dynamicMethods, dynamicTags) {
-        mutableListOf("ALL", "2XX", "4XX", "5XX").apply {
+    val hasSuccess = remember(logs) { logs.any { it.isSuccess } }
+    val hasError = remember(logs) { logs.any { it.isError } }
+
+    val availableFilters = remember(dynamicMethods, dynamicTags, hasSuccess, hasError) {
+        mutableListOf(InspectoStatusFilter.ALL.value).apply {
+            if (hasSuccess) add(InspectoStatusFilter.SUCCESS.value)
+            if (hasError) add(InspectoStatusFilter.ERR.value)
+            addAll(listOf(InspectoStatusFilter.STATUS_2XX.value, InspectoStatusFilter.STATUS_3XX.value, InspectoStatusFilter.STATUS_4XX.value, InspectoStatusFilter.STATUS_5XX.value))
             addAll(dynamicMethods)
             addAll(dynamicTags)
         }.distinct()

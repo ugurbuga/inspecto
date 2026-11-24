@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -60,6 +61,8 @@ import com.ugurbuga.inspecto.generated.resources.ic_keyboard_arrow_down
 import com.ugurbuga.inspecto.generated.resources.ic_keyboard_arrow_up
 import com.ugurbuga.inspecto.generated.resources.ic_remove
 import com.ugurbuga.inspecto.generated.resources.ic_search
+import com.ugurbuga.inspecto.generated.resources.ic_text_overflow
+import com.ugurbuga.inspecto.generated.resources.ic_text_wrap
 import com.ugurbuga.inspecto.generated.resources.increase_font_description
 import com.ugurbuga.inspecto.generated.resources.next_match_description
 import com.ugurbuga.inspecto.generated.resources.previous_match_description
@@ -95,6 +98,9 @@ internal fun HeadersAndBodyTabContent(
     var isSearchOpen by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var currentMatchIndex by remember { mutableStateOf(0) }
+
+    // Horizontal scroll / Word wrap state (Request 3)
+    var isHorizontalScrollEnabled by remember { mutableStateOf(false) }
 
     LaunchedEffect(rawBody) {
         isProcessing = true
@@ -340,6 +346,19 @@ internal fun HeadersAndBodyTabContent(
                         )
                     }
 
+                    // Horizontal scroll / Word wrap toggle button (2nd from right)
+                    IconButton(
+                        onClick = { isHorizontalScrollEnabled = !isHorizontalScrollEnabled },
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(if (isHorizontalScrollEnabled) Res.drawable.ic_text_wrap else Res.drawable.ic_text_overflow),
+                            contentDescription = "Toggle Horizontal Scroll",
+                            tint = if (isHorizontalScrollEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+
                     if (rawBody.isNotBlank()) {
                         IconButton(onClick = onCopyBody, modifier = Modifier.size(28.dp)) {
                             Icon(
@@ -461,7 +480,19 @@ internal fun HeadersAndBodyTabContent(
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Box(modifier = Modifier.padding(12.dp)) {
+                val horizontalScrollState = rememberScrollState()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .then(
+                            if (isHorizontalScrollEnabled) {
+                                Modifier.horizontalScroll(horizontalScrollState)
+                            } else {
+                                Modifier
+                            }
+                        )
+                        .padding(12.dp)
+                ) {
                     when {
                         rawBody.isBlank() -> {
                             Text(
@@ -476,7 +507,6 @@ internal fun HeadersAndBodyTabContent(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .padding(vertical = 16.dp)
                             ) {
                                 CircularProgressIndicator(
@@ -497,17 +527,7 @@ internal fun HeadersAndBodyTabContent(
                                 LazyColumn(
                                     state = bodyListState,
                                     modifier = Modifier
-                                        .fillMaxWidth()
                                         .heightIn(max = 500.dp)
-                                        .pointerInput(Unit) {
-                                            detectDragGestures(
-                                                onDragStart = {
-                                                    focusManager.clearFocus()
-                                                    keyboardController?.hide()
-                                                },
-                                                onDrag = { _, _ -> }
-                                            )
-                                        }
                                 ) {
                                     items(
                                         count = formattedLines.size,
@@ -542,7 +562,6 @@ internal fun HeadersAndBodyTabContent(
 
                                         Box(
                                             modifier = Modifier
-                                                .fillMaxWidth()
                                                 .background(lineBg, RoundedCornerShape(2.dp))
                                                 .padding(horizontal = 4.dp, vertical = 2.dp)
                                         ) {
@@ -551,7 +570,8 @@ internal fun HeadersAndBodyTabContent(
                                                 style = MaterialTheme.typography.bodySmall.copy(
                                                     fontSize = bodyFontSize
                                                 ),
-                                                lineHeight = (bodyFontSize.value * 1.4f).sp
+                                                lineHeight = (bodyFontSize.value * 1.4f).sp,
+                                                softWrap = !isHorizontalScrollEnabled
                                             )
                                         }
                                     }

@@ -37,7 +37,7 @@ kotlin {
 }
 
 mavenPublishing {
-    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha16")
+    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha17")
 
     pom {
         name.set("Inspecto OkHttp")

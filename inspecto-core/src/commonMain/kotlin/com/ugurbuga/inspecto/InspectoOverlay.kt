@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 
 @Composable
-fun InspectOverlay(
+fun InspectoOverlay(
     fontFamily: FontFamily? = null,
     content: @Composable () -> Unit
 ) {

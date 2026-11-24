@@ -61,8 +61,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ugurbuga.inspecto.InspectoOverlay
 import com.ugurbuga.inspecto.Inspecto
-import com.ugurbuga.inspecto.InspectOverlay
 import com.ugurbuga.inspectodemo.shared.generated.resources.Res
 import com.ugurbuga.inspectodemo.shared.generated.resources.outfit
 import kotlinx.coroutines.launch
@@ -76,7 +76,7 @@ fun App() {
     }
 
     val outfitFont = FontFamily(Font(Res.font.outfit))
-    InspectOverlay(fontFamily = outfitFont) {
+    InspectoOverlay(fontFamily = outfitFont) {
         var isLoading by remember { mutableStateOf(false) }
 
         InspectoDemoContent(
@@ -209,7 +209,10 @@ internal fun InspectoDemoContent(
         if (totalCount != prevCount) {
             prevCount = totalCount
             pulseScale.animateTo(1.35f, animationSpec = tween(120))
-            pulseScale.animateTo(1f, animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy))
+            pulseScale.animateTo(
+                1f,
+                animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+            )
             pulseBorderAlpha.animateTo(1f, animationSpec = tween(100))
             pulseBorderAlpha.animateTo(0f, animationSpec = tween(400))
         }
@@ -270,7 +273,9 @@ internal fun InspectoDemoContent(
                                     Text(
                                         text = "Captured Network Traffic",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(
+                                            alpha = 0.7f
+                                        )
                                     )
                                 }
 
@@ -288,7 +293,10 @@ internal fun InspectoDemoContent(
                                         color = MaterialTheme.colorScheme.onPrimary,
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                                        modifier = Modifier.padding(
+                                            horizontal = 12.dp,
+                                            vertical = 6.dp
+                                        )
                                     )
                                 }
                             }

@@ -8,11 +8,6 @@ import com.apollographql.apollo.interceptor.ApolloInterceptorChain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonNull
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Apollo Kotlin Interceptor for Inspecto.
@@ -35,29 +30,47 @@ class InspectoApolloInterceptor(
         } catch (_: Throwable) {
             "query"
         }
+        val queryDocument = try {
+            request.operation.document()
+        } catch (_: Throwable) {
+            null
+        }
         val operationType = when {
             document.contains("mutation") -> "MUTATION"
             document.contains("subscription") -> "SUBSCRIPTION"
             else -> "QUERY"
         }
 
+        val queryVariables = runCatching {
+            val buffer = okio.Buffer()
+            val writer = com.apollographql.apollo.api.json.BufferedSinkJsonWriter(buffer)
+            writer.beginObject()
+            request.operation.serializeVariables(writer, com.apollographql.apollo.api.CustomScalarAdapters.Empty, false)
+            writer.endObject()
+            writer.flush()
+            val str = buffer.readUtf8()
+            if (str == "{}") null else str
+        }.getOrNull()
+
         return chain.proceed(request)
             .onEach { response ->
                 val duration = kotlin.time.Clock.System.now().toEpochMilliseconds() - startTime
-                val hasErrors = !response.errors.isNullOrEmpty()
-                val statusCode = if (hasErrors) 500 else 200
+                val httpException = response.exception as? com.apollographql.apollo.exception.ApolloHttpException
+                val hasErrors = !response.errors.isNullOrEmpty() || response.exception != null
+                val statusCode = httpException?.statusCode ?: if (hasErrors) 500 else 200
 
-                val dataJson = response.data?.let { dataObj ->
-                    formatApolloDataToJson(dataObj)
-                } ?: "null"
-
-                val rawResponseBody = buildString {
-                    append("{\"data\":")
-                    append(dataJson)
-                    if (hasErrors) {
-                        append(",\"errors\":${response.errors}}")
-                    } else {
-                        append("}")
+                val rawResponseBody = when {
+                    response.exception != null -> {
+                        val errMessage = response.exception?.message ?: "Unknown error"
+                        "{\"error\": \"${errMessage.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", " ").replace("\r", "")}\"}"
+                    }
+                    !response.errors.isNullOrEmpty() -> {
+                        "{\"data\":null,\"errors\":${response.errors?.map { mapOf("message" to it.message) }}}"
+                    }
+                    else -> {
+                        response.data?.let { dataObj ->
+                            formatApolloResponseData(request, dataObj)
+                        } ?: "{\"data\":null}"
                     }
                 }
 
@@ -67,7 +80,8 @@ class InspectoApolloInterceptor(
                     operationName = operationName,
                     operationType = operationType,
                     endpointUrl = endpointUrl,
-                    queryVariables = null,
+                    queryDocument = queryDocument,
+                    queryVariables = queryVariables,
                     responseDataBody = formattedBody,
                     statusCode = statusCode,
                     durationMs = duration,
@@ -80,7 +94,8 @@ class InspectoApolloInterceptor(
                     operationName = operationName,
                     operationType = operationType,
                     endpointUrl = endpointUrl,
-                    queryVariables = null,
+                    queryDocument = queryDocument,
+                    queryVariables = queryVariables,
                     responseDataBody = Inspecto.formatJson("{\"error\": \"${throwable.message}\"}"),
                     statusCode = 500,
                     durationMs = duration,
@@ -90,116 +105,179 @@ class InspectoApolloInterceptor(
             }
     }
 
-    private fun formatApolloDataToJson(value: Any?): String {
-        if (value == null) return "null"
+    private fun <D : Operation.Data> formatApolloResponseData(request: ApolloRequest<D>, data: D): String {
         return runCatching {
-            val jsonElement = toJsonElement(value)
-            jsonElement.toString()
-        }.getOrDefault("null")
+            val buffer = okio.Buffer()
+            val writer = com.apollographql.apollo.api.json.BufferedSinkJsonWriter(buffer)
+            writer.beginObject()
+            writer.name("data")
+            request.operation.adapter().toJson(writer, com.apollographql.apollo.api.CustomScalarAdapters.Empty, data)
+            writer.endObject()
+            writer.flush()
+            val result = buffer.readUtf8()
+            if (result.isBlank()) anyToJson(mapOf("data" to data)) else result
+        }.getOrElse {
+            anyToJson(mapOf("data" to data))
+        }
     }
 
-    private fun toJsonElement(value: Any?): JsonElement {
+    private fun anyToJson(value: Any?): String {
+        if (value == null) return "null"
         return when (value) {
-            null -> JsonNull
+            is Number, is Boolean -> value.toString()
+            is String -> "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\""
             is Map<*, *> -> {
-                val map = mutableMapOf<String, JsonElement>()
-                for ((k, v) in value) {
-                    if (k != null) {
-                        map[k.toString()] = toJsonElement(v)
-                    }
+                val entries = value.entries.mapNotNull { (k, v) ->
+                    if (k != null) "\"$k\":${anyToJson(v)}" else null
                 }
-                JsonObject(map)
+                "{" + entries.joinToString(",") + "}"
             }
-            is List<*> -> {
-                JsonArray(value.map { toJsonElement(it) })
+            is Iterable<*> -> {
+                val items = value.map { anyToJson(it) }
+                "[" + items.joinToString(",") + "]"
             }
-            is String -> JsonPrimitive(value)
-            is Number -> JsonPrimitive(value)
-            is Boolean -> JsonPrimitive(value)
+            is Array<*> -> {
+                val items = value.map { anyToJson(it) }
+                "[" + items.joinToString(",") + "]"
+            }
             else -> {
-                val str = value.toString()
-                if (str.startsWith("Data(") && str.endsWith(")")) {
-                    parseKotlinDataClassToJson(str)
-                } else {
-                    JsonPrimitive(str)
-                }
+                convertKotlinToStringToJson(value.toString())
             }
         }
     }
 
-    private fun parseKotlinDataClassToJson(str: String): JsonElement {
-        return runCatching {
-            var s = str.trim()
-            if (s.startsWith("Data(") && s.endsWith(")")) {
-                s = s.substring(5, s.length - 1)
-            }
-            if (s.startsWith("characters=")) {
-                val inner = s.substring("characters=".length)
-                JsonObject(mapOf("characters" to parseKotlinMapStringToJson(inner)))
-            } else {
-                JsonPrimitive(s)
-            }
-        }.getOrDefault(JsonNull)
+    private fun convertKotlinToStringToJson(input: String): String {
+        var s = input.trim()
+        if ((s.startsWith("{") && s.endsWith("}")) || (s.startsWith("(") && s.endsWith(")"))) {
+            val content = s.substring(1, s.length - 1)
+            return "{${convertContentToJson(content)}}"
+        }
+        val parenIdx = s.indexOf('(')
+        if (parenIdx != -1 && s.endsWith(")")) {
+            val content = s.substring(parenIdx + 1, s.length - 1)
+            return "{${convertContentToJson(content)}}"
+        }
+        val braceIdx = s.indexOf('{')
+        if (braceIdx != -1 && s.endsWith("}")) {
+            val content = s.substring(braceIdx + 1, s.length - 1)
+            return "{${convertContentToJson(content)}}"
+        }
+        return "\"" + s.replace("\"", "\\\"") + "\""
     }
 
-    private fun parseKotlinMapStringToJson(str: String): JsonElement {
-        return runCatching {
-            val s = str.trim()
-            when {
-                s.startsWith("{") && s.endsWith("}") -> {
-                    val inner = s.substring(1, s.length - 1)
-                    val map = mutableMapOf<String, JsonElement>()
-                    var i = 0
-                    while (i < inner.length) {
-                        val equalsIdx = inner.indexOf('=', i)
-                        if (equalsIdx == -1) break
-                        val key = inner.substring(i, equalsIdx).trim().trim('{', ',', ' ')
+    private fun convertContentToJson(content: String): String {
+        val result = StringBuilder()
+        var i = 0
+        while (i < content.length) {
+            val eqIdx = content.indexOf('=', i)
+            if (eqIdx == -1) {
+                result.append(content.substring(i))
+                break
+            }
+            val key = content.substring(i, eqIdx).trim()
+            result.append("\"$key\":")
 
-                        var depth = 0
-                        var endIdx = equalsIdx + 1
-                        while (endIdx < inner.length) {
-                            val c = inner[endIdx]
-                            if (c == '{' || c == '[') depth++
-                            if (c == '}' || c == ']') depth--
-                            if (c == ',' && depth == 0) break
-                            endIdx++
-                        }
-
-                        val valStr = inner.substring(equalsIdx + 1, endIdx).trim()
-                        map[key] = parseKotlinMapStringToJson(valStr)
-                        i = endIdx + 1
-                    }
-                    JsonObject(map)
-                }
-                s.startsWith("[") && s.endsWith("]") -> {
-                    val inner = s.substring(1, s.length - 1)
-                    val list = mutableListOf<JsonElement>()
-                    var depth = 0
-                    var start = 0
-                    for (i in inner.indices) {
-                        val c = inner[i]
-                        if (c == '{' || c == '[') depth++
-                        if (c == '}' || c == ']') depth--
-                        if (c == ',' && depth == 0) {
-                            list.add(parseKotlinMapStringToJson(inner.substring(start, i).trim()))
-                            start = i + 1
+            var depthParen = 0
+            var depthBracket = 0
+            var depthBrace = 0
+            var j = eqIdx + 1
+            while (j < content.length) {
+                val c = content[j]
+                when (c) {
+                    '(' -> depthParen++
+                    ')' -> depthParen--
+                    '[' -> depthBracket++
+                    ']' -> depthBracket--
+                    '{' -> depthBrace++
+                    '}' -> depthBrace--
+                    ',' -> {
+                        if (depthParen == 0 && depthBracket == 0 && depthBrace == 0) {
+                            if (isNextFieldAssignment(content, j + 1)) break
                         }
                     }
-                    if (start < inner.length) {
-                        list.add(parseKotlinMapStringToJson(inner.substring(start).trim()))
-                    }
-                    JsonArray(list)
                 }
-                else -> {
-                    when {
-                        s == "true" -> JsonPrimitive(true)
-                        s == "false" -> JsonPrimitive(false)
-                        s == "null" -> JsonNull
-                        s.toDoubleOrNull() != null -> JsonPrimitive(s.toDouble())
-                        else -> JsonPrimitive(s)
+                j++
+            }
+            val rawVal = content.substring(eqIdx + 1, j).trim()
+            result.append(parseValueToJson(rawVal))
+
+            if (j < content.length && content[j] == ',') {
+                result.append(",")
+                i = j + 1
+            } else {
+                i = j
+            }
+        }
+        return result.toString()
+    }
+
+    private fun isNextFieldAssignment(str: String, startIndex: Int): Boolean {
+        var idx = startIndex
+        while (idx < str.length && str[idx].isWhitespace()) {
+            idx++
+        }
+        if (idx >= str.length) return false
+
+        val startId = idx
+        while (idx < str.length && (str[idx].isLetterOrDigit() || str[idx] == '_' || str[idx] == '$')) {
+            idx++
+        }
+        if (idx == startId) return false
+
+        while (idx < str.length && str[idx].isWhitespace()) {
+            idx++
+        }
+
+        return idx < str.length && str[idx] == '='
+    }
+
+    private fun parseValueToJson(raw: String): String {
+        val s = raw.trim()
+        when {
+            s == "null" || s.isEmpty() -> return "null"
+            s == "true" || s == "false" -> return s
+            s.toDoubleOrNull() != null -> return s
+            s.startsWith("[") && s.endsWith("]") -> {
+                val inner = s.substring(1, s.length - 1).trim()
+                if (inner.isEmpty()) return "[]"
+                val items = splitByComma(inner)
+                return "[" + items.joinToString(",") { parseValueToJson(it) } + "]"
+            }
+            s.contains("=") && (s.contains("{") || s.contains("(")) -> {
+                return convertKotlinToStringToJson(s)
+            }
+        }
+        return "\"" + s.replace("\"", "\\\"") + "\""
+    }
+
+    private fun splitByComma(inner: String): List<String> {
+        val list = mutableListOf<String>()
+        var depthParen = 0
+        var depthBracket = 0
+        var depthBrace = 0
+        var start = 0
+        var k = 0
+        while (k < inner.length) {
+            val c = inner[k]
+            when (c) {
+                '(' -> depthParen++
+                ')' -> depthParen--
+                '[' -> depthBracket++
+                ']' -> depthBracket--
+                '{' -> depthBrace++
+                '}' -> depthBrace--
+                ',' -> {
+                    if (depthParen == 0 && depthBracket == 0 && depthBrace == 0) {
+                        list.add(inner.substring(start, k).trim())
+                        start = k + 1
                     }
                 }
             }
-        }.getOrDefault(JsonPrimitive(str))
+            k++
+        }
+        if (start < inner.length) {
+            list.add(inner.substring(start).trim())
+        }
+        return list
     }
 }

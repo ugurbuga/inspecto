@@ -25,7 +25,8 @@ object InspectoGraphQL {
     fun logOperation(
         operationName: String,
         operationType: String = "QUERY",
-        endpointUrl: String = "https://api.graphql.local/graphql",
+        endpointUrl: String,
+        queryDocument: String? = null,
         queryVariables: String? = null,
         responseDataBody: String? = null,
         statusCode: Int = 200,
@@ -33,7 +34,16 @@ object InspectoGraphQL {
         isError: Boolean = false
     ) {
         val rawRequestBody = buildString {
-            append("{\"operationName\":\"$operationName\",\"type\":\"$operationType\"")
+            append("{")
+            if (!queryDocument.isNullOrBlank()) {
+                val escapedQuery = queryDocument
+                    .replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\n", "\\n")
+                    .replace("\r", "")
+                append("\"query\":\"$escapedQuery\",")
+            }
+            append("\"operationName\":\"$operationName\"")
             if (!queryVariables.isNullOrBlank()) {
                 append(",\"variables\":$queryVariables")
             }

@@ -73,7 +73,7 @@ kotlin {
             api(libs.kotlinx.serialization.json)
             api(libs.kotlinx.datetime)
             api(libs.ktor.client.core)
-            implementation(libs.apollo.runtime)
+            api(libs.apollo.runtime)
             api(libs.ktor.client.content.negotiation)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.coil.compose)
@@ -96,9 +96,6 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-        }
-        getByName("androidDeviceTest").dependencies {
-            implementation(libs.androidx.testRunner)
         }
     }
 }

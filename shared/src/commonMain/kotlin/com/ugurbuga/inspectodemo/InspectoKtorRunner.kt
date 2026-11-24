@@ -64,7 +64,10 @@ object InspectoKtorRunner {
                 method = "POST",
                 statusCode = 400,
                 durationMs = 312,
-                requestHeaders = mapOf("Content-Type" to "application/json", "Authorization" to "Bearer sample_token_123"),
+                requestHeaders = mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to "Bearer sample_token_123"
+                ),
                 requestBody = "{\n  \"cartId\": \"cart_99812\",\n  \"couponCode\": \"EXPIRED_COUPON_2024\"\n}",
                 responseHeaders = mapOf("Content-Type" to "application/json; charset=utf-8"),
                 responseBody = "{\n  \"status\": 400,\n  \"error\": \"BAD_REQUEST\",\n  \"message\": \"Coupon code 'EXPIRED_COUPON_2024' is invalid or expired.\"\n}",
@@ -84,7 +87,10 @@ object InspectoKtorRunner {
                 method = "POST",
                 statusCode = 500,
                 durationMs = 1240,
-                requestHeaders = mapOf("Content-Type" to "application/json", "Authorization" to "Bearer sample_token_123"),
+                requestHeaders = mapOf(
+                    "Content-Type" to "application/json",
+                    "Authorization" to "Bearer sample_token_123"
+                ),
                 requestBody = "{\n  \"amount\": 149.99,\n  \"currency\": \"USD\",\n  \"paymentMethodId\": \"pm_card_visa\"\n}",
                 responseHeaders = mapOf("Content-Type" to "application/json; charset=utf-8"),
                 responseBody = "{\n  \"status\": 500,\n  \"error\": \"INTERNAL_SERVER_ERROR\",\n  \"message\": \"Database transaction timeout in payment gateway service.\"\n}",
