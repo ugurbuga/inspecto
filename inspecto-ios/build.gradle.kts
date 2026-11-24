@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha14"
+version = "1.0.0-alpha17"
 
 kotlin {
     iosArm64()

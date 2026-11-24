@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha15"
+version = "1.0.0-alpha17"
 
 compose.resources {
     publicResClass = true

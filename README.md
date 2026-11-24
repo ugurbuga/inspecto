@@ -73,15 +73,15 @@ iosMain.dependencies {
 
 ### 2. Launching Inspecto UI
 
-Wrap your root composable with `InspectOverlay` and launch the inspector anywhere:
+Wrap your root composable with `InspectoOverlay` and launch the inspector anywhere:
 
 ```kotlin
-import com.ugurbuga.inspecto.InspectOverlay
+import com.ugurbuga.inspecto.InspectoOverlay
 import com.ugurbuga.inspecto.Inspecto
 
 @Composable
 fun App() {
-    InspectOverlay {
+    InspectoOverlay {
         Button(onClick = { Inspecto.launch() }) {
             Text("Open Inspecto Inspector")
         }
@@ -93,14 +93,10 @@ fun App() {
 
 ### 3. Custom Font Configuration (Optional)
 
-Inspecto is font-agnostic by default (`FontFamily.Default`). You can supply your own custom font globally or via `InspectOverlay`:
+Inspecto is font-agnostic by default (`FontFamily.Default`). You can supply your own custom font via `InspectoOverlay`:
 
 ```kotlin
-// Option A: Global assignment
-Inspecto.customFontFamily = FontFamily(Font(Res.font.my_custom_font))
-
-// Option B: Composable parameter
-InspectOverlay(fontFamily = FontFamily(Font(Res.font.my_custom_font))) {
+InspectoOverlay(fontFamily = FontFamily(Font(Res.font.my_custom_font))) {
     // App UI
 }
 ```
