@@ -198,9 +198,11 @@ Add `InspectoApolloInterceptor` to your `ApolloClient.Builder`, explicitly provi
 import com.apollographql.apollo.ApolloClient
 import com.ugurbuga.inspecto.InspectoApolloInterceptor
 
+val url = "https://api.example.com/graphql"
+
 val apolloClient = ApolloClient.Builder()
-    .serverUrl("https://rickandmortyapi.com/graphql")
-    .addInterceptor(InspectoApolloInterceptor("https://rickandmortyapi.com/graphql"))
+    .serverUrl(url)
+    .addInterceptor(InspectoApolloInterceptor(url))
     .build()
 ```
 *✨ Automatically intercepts GraphQL queries and mutations, pretty-prints responses, and displays them with a magenta **`GraphQL`** tag.*

@@ -13,7 +13,16 @@ import kotlinx.coroutines.flow.onEach
  * Apollo Kotlin Interceptor for Inspecto.
  *
  * Automatically intercepts and logs all Apollo GraphQL requests and responses across Android, iOS, Desktop, and Web.
- * Requires the user to explicitly provide the [endpointUrl] in the constructor (no static defaults inside the library).
+ * Requires the user to explicitly provide the [endpointUrl] in the constructor.
+ *
+ * Usage:
+ * ```kotlin
+ * val url = "https://api.example.com/graphql"
+ * val apolloClient = ApolloClient.Builder()
+ *     .serverUrl(url)
+ *     .addInterceptor(InspectoApolloInterceptor(url))
+ *     .build()
+ * ```
  */
 class InspectoApolloInterceptor(
     private val endpointUrl: String
