@@ -1,6 +1,20 @@
 # Inspecto 🔍
 
-**Inspecto** is a powerful, lightweight, cross-platform network and event inspection library for **Kotlin Multiplatform (KMP)** and Jetpack Compose (Android, iOS, Desktop JVM, Web JS/WasmJS). Inspired by Chucker, it provides real-time HTTP/GraphQL request & response inspection, search filtering, JSON beautification, cURL export, and custom font configuration.
+[![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin_Multiplatform-KMP-blue?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
+[![Compose Multiplatform](https://img.shields.io/badge/Compose_Multiplatform-CMP-purple?logo=jetbrains)](https://www.jetbrains.com/lp/compose-multiplatform/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![GitHub Packages](https://img.shields.io/badge/GitHub_Packages-v1.0.0--alpha17-orange)](https://github.com/ugurbuga/inspecto/packages)
+
+**Inspecto** is a lightweight, modular, cross-platform network and event inspection library built specifically for **Kotlin Multiplatform (KMP)** and Jetpack Compose (Android, iOS, Desktop JVM, Web JS/WasmJS).
+
+Inspired by Chucker, **Inspecto** enables real-time in-app inspection for HTTP and Apollo GraphQL network traffic with zero setup friction.
+
+### 🌟 Key Highlights
+
+- **🧩 Fully Modular Architecture**: Zero bloat! Core UI & Storage (`inspecto-core`) is completely decoupled from network client SDKs. Add only the interceptors you use (`inspecto-ktor`, `inspecto-okhttp`, `inspecto-apollo`, `inspecto-ios`).
+- **⚡ Zero-Config Android Setup**: Automatically captures context on startup via `InspectoInitProvider`—no `Application` subclassing or `MainActivity` code modifications required.
+- **📱 In-App Overlay (`InspectoOverlay`)**: Renders directly inside your Compose app on all platforms with back gesture/button navigation.
+- **🎨 Beautiful Developer Experience**: Real-time HTTP & Apollo GraphQL interceptors, JSON syntax highlighting, in-page search, word wrap / horizontal scroll toggling, cURL command export, and smart multi-field filtering.
 
 ---
 
