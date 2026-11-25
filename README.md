@@ -3,7 +3,7 @@
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin_Multiplatform-KMP-blue?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose_Multiplatform-CMP-purple?logo=jetbrains)](https://www.jetbrains.com/lp/compose-multiplatform/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![GitHub Packages](https://img.shields.io/badge/GitHub_Packages-v1.0.0--alpha18-orange)](https://github.com/ugurbuga/inspecto/packages)
+[![GitHub Packages](https://img.shields.io/badge/GitHub_Packages-v1.0.0--alpha19-orange)](https://github.com/ugurbuga/inspecto/packages)
 
 **Inspecto** is a lightweight, modular, cross-platform network and event inspection library built specifically for **Kotlin Multiplatform (KMP)** and Jetpack Compose (Android, iOS, Desktop JVM, Web JS/WasmJS).
 
@@ -70,16 +70,16 @@ Add Inspecto dependencies to your multiplatform module (`commonMain` & `iosMain`
 ```kotlin
 commonMain.dependencies {
     // Core UI, models & storage (Required)
-    implementation("io.github.ugurbuga:inspecto-core:1.0.0-alpha18")
+    implementation("io.github.ugurbuga:inspecto-core:1.0.0-alpha19")
 
     // Optional Network Add-ons (Add only what you use)
-    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha18")
-    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha18")
-    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha18")
+    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha19")
+    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha19")
+    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha19")
 }
 
 iosMain.dependencies {
-    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha18")
+    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha19")
 }
 ```
 
