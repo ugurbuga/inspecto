@@ -1,5 +1,6 @@
 package com.ugurbuga.inspecto
 
+import io.ktor.client.plugins.api.Send
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.statement.bodyAsText
 import io.ktor.util.AttributeKey
@@ -14,6 +15,33 @@ val InspectoKtorLogging = createClientPlugin("InspectoKtorLogging") {
     onRequest { request, _ ->
         request.attributes.put(RequestStartKey, TimeSource.Monotonic.markNow())
     }
+
+    on(Send) { request ->
+        val startTime = TimeSource.Monotonic.markNow()
+        val url = request.url.toString()
+        val method = request.method.value
+        val requestHeaders = request.headers.entries().associate { it.key to it.value.joinToString(", ") }
+        val queryParams = request.url.parameters.entries().associate { it.key to it.value.joinToString(", ") }
+
+        try {
+            proceed(request)
+        } catch (e: Throwable) {
+            val duration = startTime.elapsedNow().inWholeMilliseconds
+            Inspecto.addLog(
+                url = url,
+                method = method,
+                statusCode = 0,
+                durationMs = duration,
+                requestHeaders = requestHeaders,
+                requestQueryParams = queryParams,
+                responseHeaders = emptyMap(),
+                responseBody = e.message ?: e.toString(),
+                tag = InspectoTag.KTOR
+            )
+            throw e
+        }
+    }
+
     onResponse { response ->
         val startTime = response.call.request.attributes.getOrNull(RequestStartKey)
         val duration = startTime?.elapsedNow()?.inWholeMilliseconds ?: 0L

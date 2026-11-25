@@ -10,22 +10,11 @@ private val inspectoSession: NSURLSession by lazy {
     NSURLSession.sessionWithConfiguration(config)
 }
 
-private var requestToggle = false
-
 actual fun performNSURLSessionTestRequest(url: String, onResult: (String) -> Unit) {
-    requestToggle = !requestToggle
-    // Alternate between a successful call (200 OK) and a failed call (404 Not Found)
-    val targetUrl = if (requestToggle) {
-        "https://httpbin.org/get"
-    } else {
-        "https://httpbin.org/status/404"
-    }
-
-    val nsUrl = NSURL.URLWithString(targetUrl) ?: return onResult("Invalid URL")
+    val nsUrl = NSURL.URLWithString(url) ?: return onResult("Invalid URL")
     val request = NSMutableURLRequest.requestWithURL(nsUrl)
     request.HTTPMethod = "GET"
 
-    // 100% automated logging via Inspecto extension function!
     val task = inspectoSession.dataTaskWithRequestAndLog(request) { data, response, error ->
         val httpResponse = response as? NSHTTPURLResponse
         val statusCode = httpResponse?.statusCode?.toInt() ?: 0
@@ -34,7 +23,7 @@ actual fun performNSURLSessionTestRequest(url: String, onResult: (String) -> Uni
             "URLSession Error: ${error.localizedDescription}"
         } else {
             val length = data?.length ?: 0
-            "URLSession Response ($statusCode): Received $length bytes (Logged automatically by Inspecto)"
+            "URLSession Response ($statusCode): Received $length bytes"
         }
         onResult(resultMsg)
     }

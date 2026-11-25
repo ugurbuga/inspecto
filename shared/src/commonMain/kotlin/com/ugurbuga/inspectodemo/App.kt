@@ -159,6 +159,18 @@ fun App() {
                     isLoading = false
                 }
             },
+            onNSURLSession400Click = {
+                isLoading = true
+                performNSURLSessionTestRequest("https://httpbin.org/status/400") { _ ->
+                    isLoading = false
+                }
+            },
+            onNSURLSession500Click = {
+                isLoading = true
+                performNSURLSessionTestRequest("https://httpbin.org/status/500") { _ ->
+                    isLoading = false
+                }
+            },
             onApolloClick = {
                 isLoading = true
                 kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Default).launch {
@@ -193,6 +205,8 @@ internal fun InspectoDemoContent(
     onErr500Click: () -> Unit = {},
     onOkHttpClick: () -> Unit = {},
     onNSURLSessionClick: () -> Unit = {},
+    onNSURLSession400Click: () -> Unit = {},
+    onNSURLSession500Click: () -> Unit = {},
     onApolloClick: () -> Unit = {},
     onOpenInspecto: () -> Unit = {},
     onManualLogClick: () -> Unit = {},
@@ -433,13 +447,34 @@ internal fun InspectoDemoContent(
                                 )
                             }
                             if (isNSURLSessionSupported) {
-                                DemoActionButton(
-                                    text = "iOS NSURLSession Request",
-                                    color = Color(0xFFF59E0B),
-                                    enabled = !isLoading,
-                                    onClick = onNSURLSessionClick,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    DemoActionButton(
+                                        text = "iOS NSURLSession (200 OK)",
+                                        color = Color(0xFFF59E0B),
+                                        enabled = !isLoading,
+                                        onClick = onNSURLSessionClick,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    ) {
+                                        DemoActionButton(
+                                            text = "iOS NSURLSession (400 Error)",
+                                            color = Color(0xFFE11D48),
+                                            enabled = !isLoading,
+                                            onClick = onNSURLSession400Click,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        DemoActionButton(
+                                            text = "iOS NSURLSession (500 Error)",
+                                            color = Color(0xFF9333EA),
+                                            enabled = !isLoading,
+                                            onClick = onNSURLSession500Click,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
                             }
                             DemoActionButton(
                                 text = "Apollo GraphQL Query",

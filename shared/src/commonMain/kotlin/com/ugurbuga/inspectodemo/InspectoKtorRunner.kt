@@ -1,6 +1,5 @@
 package com.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.Inspecto
 import com.ugurbuga.inspecto.InspectoKtorLogging
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -55,48 +54,12 @@ object InspectoKtorRunner {
     }
 
     suspend fun triggerBadRequest400(): String {
-        return try {
-            val response: HttpResponse = ktorClient.get("https://httpstat.us/400")
-            "HTTP 400 Bad Request (${response.status.value})"
-        } catch (e: Exception) {
-            Inspecto.addLog(
-                url = "https://api.example.com/v1/checkout/apply-coupon",
-                method = "POST",
-                statusCode = 400,
-                durationMs = 312,
-                requestHeaders = mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to "Bearer sample_token_123"
-                ),
-                requestBody = "{\n  \"cartId\": \"cart_99812\",\n  \"couponCode\": \"EXPIRED_COUPON_2024\"\n}",
-                responseHeaders = mapOf("Content-Type" to "application/json; charset=utf-8"),
-                responseBody = "{\n  \"status\": 400,\n  \"error\": \"BAD_REQUEST\",\n  \"message\": \"Coupon code 'EXPIRED_COUPON_2024' is invalid or expired.\"\n}",
-                tag = "Ktor"
-            )
-            "Triggered 400 Bad Request Error"
-        }
+        val response: HttpResponse = ktorClient.get("https://httpbin.org/status/400")
+        return "HTTP 400 Bad Request (${response.status.value})"
     }
 
     suspend fun triggerServerError500(): String {
-        return try {
-            val response: HttpResponse = ktorClient.get("https://httpstat.us/500")
-            "HTTP 500 Internal Server Error (${response.status.value})"
-        } catch (e: Exception) {
-            Inspecto.addLog(
-                url = "https://api.example.com/v1/payment/process-charge",
-                method = "POST",
-                statusCode = 500,
-                durationMs = 1240,
-                requestHeaders = mapOf(
-                    "Content-Type" to "application/json",
-                    "Authorization" to "Bearer sample_token_123"
-                ),
-                requestBody = "{\n  \"amount\": 149.99,\n  \"currency\": \"USD\",\n  \"paymentMethodId\": \"pm_card_visa\"\n}",
-                responseHeaders = mapOf("Content-Type" to "application/json; charset=utf-8"),
-                responseBody = "{\n  \"status\": 500,\n  \"error\": \"INTERNAL_SERVER_ERROR\",\n  \"message\": \"Database transaction timeout in payment gateway service.\"\n}",
-                tag = "Ktor"
-            )
-            "Triggered 500 Internal Server Error"
-        }
+        val response: HttpResponse = ktorClient.get("https://httpbin.org/status/500")
+        return "HTTP 500 Internal Server Error (${response.status.value})"
     }
 }

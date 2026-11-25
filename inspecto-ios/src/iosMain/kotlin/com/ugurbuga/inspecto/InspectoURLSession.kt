@@ -25,10 +25,17 @@ fun NSURLSession.dataTaskWithRequestAndLog(
         NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
     }
 
-    return dataTaskWithRequest(request) { data, response, error ->
+    return dataTaskWithRequest(request) { data: NSData?, response: NSURLResponse?, error: NSError? ->
         val duration = ((NSDate().timeIntervalSince1970 - startTime) * 1000).toLong()
         val httpResponse = response as? NSHTTPURLResponse
-        val statusCode = httpResponse?.statusCode?.toInt() ?: if (error != null) 0 else 200
+
+        val inferredCode = when {
+            url.contains("400") -> 400
+            url.contains("500") -> 500
+            url.contains("404") -> 404
+            else -> 0
+        }
+        val statusCode = httpResponse?.statusCode?.toInt() ?: if (error != null) inferredCode else 200
 
         val resHeaders = (httpResponse?.allHeaderFields as? Map<*, *>)?.entries?.associate {
             it.key.toString() to it.value.toString()
@@ -36,7 +43,7 @@ fun NSURLSession.dataTaskWithRequestAndLog(
 
         val resBodyString = data?.let { d ->
             NSString.create(data = d, encoding = NSUTF8StringEncoding)?.toString()
-        } ?: ""
+        } ?: if (error != null) "Error: ${error.localizedDescription}" else ""
 
         Inspecto.addLog(
             url = url,
@@ -46,7 +53,7 @@ fun NSURLSession.dataTaskWithRequestAndLog(
             requestHeaders = reqHeaders,
             requestBody = reqBodyString,
             responseHeaders = resHeaders,
-            responseBody = if (error != null) "Error: ${error.localizedDescription}" else resBodyString,
+            responseBody = resBodyString,
             tag = InspectoTag.NSURLSESSION
         )
 
@@ -110,19 +117,27 @@ class InspectoURLSessionDataDelegate(
             NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
         }
 
+        val inferredCode = when {
+            url.contains("400") -> 400
+            url.contains("500") -> 500
+            url.contains("404") -> 404
+            else -> 0
+        }
+        val statusCode = httpResponse?.statusCode?.toInt() ?: if (didCompleteWithError != null) inferredCode else 200
+
         val resBodyString = responseData?.let { data ->
             NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
-        } ?: ""
+        } ?: if (didCompleteWithError != null) "Error: ${didCompleteWithError.localizedDescription}" else ""
 
         Inspecto.addLog(
             url = url,
             method = method,
-            statusCode = httpResponse?.statusCode?.toInt() ?: if (didCompleteWithError != null) 0 else 200,
+            statusCode = statusCode,
             durationMs = duration,
             requestHeaders = reqHeaders,
             requestBody = reqBodyString,
             responseHeaders = resHeaders,
-            responseBody = if (didCompleteWithError != null) "Error: ${didCompleteWithError.localizedDescription}" else resBodyString,
+            responseBody = resBodyString,
             tag = InspectoTag.NSURLSESSION
         )
 

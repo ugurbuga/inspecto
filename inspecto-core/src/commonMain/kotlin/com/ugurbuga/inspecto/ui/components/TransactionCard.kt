@@ -23,9 +23,9 @@ import com.ugurbuga.inspecto.InspectoMethod
 import com.ugurbuga.inspecto.InspectoTag
 import com.ugurbuga.inspecto.ui.theme.InspectoColors
 import com.ugurbuga.inspecto.ui.theme.InspectoLightColorScheme
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.Instant
 
 @Composable
 internal fun TransactionCard(
@@ -54,16 +54,8 @@ internal fun TransactionCard(
     val host = entry.host
     val path = entry.path
 
-    @Suppress("DEPRECATION")
     val timeStr = runCatching {
-        if (entry.timestampMs <= 0L) return@runCatching ""
-        val instant = Instant.fromEpochMilliseconds(entry.timestampMs)
-        val tz = runCatching { TimeZone.currentSystemDefault() }.getOrDefault(TimeZone.UTC)
-        val dateTime = instant.toLocalDateTime(tz)
-        val h = dateTime.hour.toString().padStart(2, '0')
-        val m = dateTime.minute.toString().padStart(2, '0')
-        val s = dateTime.second.toString().padStart(2, '0')
-        "$h:$m:$s"
+        formatTimestamp(entry.timestampMs)
     }.getOrDefault("")
 
     Surface(
@@ -208,6 +200,16 @@ internal fun TransactionCard(
             }
         }
     }
+}
+
+fun formatTimestamp(timestampMs: Long): String {
+    val dateTime = Instant
+        .fromEpochMilliseconds(timestampMs)
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+
+    return "${dateTime.hour.toString().padStart(2, '0')}:" +
+            "${dateTime.minute.toString().padStart(2, '0')}:" +
+            dateTime.second.toString().padStart(2, '0')
 }
 
 @Preview(name = "GET 200 (Success)")

@@ -42,14 +42,13 @@ internal fun OverviewTabContent(
     onCopyOverviewDetails: () -> Unit,
     onToast: (String) -> Unit = {}
 ) {
-    @Suppress("DEPRECATION")
     val formattedTimestamp = runCatching {
         if (entry.timestampMs <= 0L) return@runCatching ""
         val instant = Instant.fromEpochMilliseconds(entry.timestampMs)
         val tz = runCatching { TimeZone.currentSystemDefault() }.getOrDefault(TimeZone.UTC)
         val dt = instant.toLocalDateTime(tz)
-        val day = dt.dayOfMonth.toString().padStart(2, '0')
-        val month = dt.monthNumber.toString().padStart(2, '0')
+        val day = dt.day.toString().padStart(2, '0')
+        val month = (dt.month.ordinal + 1).toString().padStart(2, '0')
         val year = dt.year.toString()
         val hour = dt.hour.toString().padStart(2, '0')
         val minute = dt.minute.toString().padStart(2, '0')
