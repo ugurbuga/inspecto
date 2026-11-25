@@ -1,32 +1,40 @@
 package com.ugurbuga.inspectodemo
 
-import com.ugurbuga.inspecto.logNSURLSessionDataTask
+import com.ugurbuga.inspecto.dataTaskWithRequestAndLog
 import platform.Foundation.*
 
 actual val isNSURLSessionSupported: Boolean = true
 
+private val inspectoSession: NSURLSession by lazy {
+    val config = NSURLSessionConfiguration.defaultSessionConfiguration
+    NSURLSession.sessionWithConfiguration(config)
+}
+
+private var requestToggle = false
+
 actual fun performNSURLSessionTestRequest(url: String, onResult: (String) -> Unit) {
-    val nsUrl = NSURL.URLWithString(url) ?: return onResult("Invalid URL")
+    requestToggle = !requestToggle
+    // Alternate between a successful call (200 OK) and a failed call (404 Not Found)
+    val targetUrl = if (requestToggle) {
+        "https://httpbin.org/get"
+    } else {
+        "https://httpbin.org/status/404"
+    }
+
+    val nsUrl = NSURL.URLWithString(targetUrl) ?: return onResult("Invalid URL")
     val request = NSMutableURLRequest.requestWithURL(nsUrl)
-    val startTime = NSDate().timeIntervalSince1970 * 1000
+    request.HTTPMethod = "GET"
 
-    val task = NSURLSession.sharedSession.dataTaskWithRequest(request) { data, response, error ->
-        val duration = ((NSDate().timeIntervalSince1970 * 1000) - startTime).toLong()
+    // 100% automated logging via Inspecto extension function!
+    val task = inspectoSession.dataTaskWithRequestAndLog(request) { data, response, error ->
         val httpResponse = response as? NSHTTPURLResponse
-
-        logNSURLSessionDataTask(
-            request = request,
-            response = httpResponse,
-            data = data,
-            error = error,
-            durationMs = duration
-        )
+        val statusCode = httpResponse?.statusCode?.toInt() ?: 0
 
         val resultMsg = if (error != null) {
-            "Error: ${error.localizedDescription}"
+            "URLSession Error: ${error.localizedDescription}"
         } else {
             val length = data?.length ?: 0
-            "Success (${httpResponse?.statusCode}): Received $length bytes via native NSURLSession"
+            "URLSession Response ($statusCode): Received $length bytes (Logged automatically by Inspecto)"
         }
         onResult(resultMsg)
     }

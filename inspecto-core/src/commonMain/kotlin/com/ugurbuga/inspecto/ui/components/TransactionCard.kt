@@ -33,8 +33,6 @@ internal fun TransactionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isPreview = LocalInspectionMode.current
-    val pathOverflow = if (isPreview) TextOverflow.Ellipsis else TextOverflow.StartEllipsis
 
     val methodBg = when (entry.method.uppercase()) {
         InspectoMethod.GET -> InspectoColors.MethodGet
@@ -56,6 +54,7 @@ internal fun TransactionCard(
     val host = entry.host
     val path = entry.path
 
+    @Suppress("DEPRECATION")
     val timeStr = runCatching {
         if (entry.timestampMs <= 0L) return@runCatching ""
         val instant = Instant.fromEpochMilliseconds(entry.timestampMs)
@@ -143,7 +142,7 @@ internal fun TransactionCard(
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    overflow = pathOverflow
+                    overflow = TextOverflow.StartEllipsis
                 )
 
                 // Row 2: Host / BaseUrl (2-part display)
@@ -219,7 +218,7 @@ internal fun TransactionCardGet200Preview() {
             TransactionCard(
                 entry = InspectoLogEntry(
                     id = "1",
-                    url = "https://api.example.com/v1/users",
+                    url = "https://api.example.com/v1/users/v1/users/v1/users/v1/users/v1/users",
                     method = InspectoMethod.GET,
                     statusCode = 200,
                     durationMs = 120L,

@@ -42,6 +42,7 @@ internal fun OverviewTabContent(
     onCopyOverviewDetails: () -> Unit,
     onToast: (String) -> Unit = {}
 ) {
+    @Suppress("DEPRECATION")
     val formattedTimestamp = runCatching {
         if (entry.timestampMs <= 0L) return@runCatching ""
         val instant = Instant.fromEpochMilliseconds(entry.timestampMs)
@@ -54,7 +55,7 @@ internal fun OverviewTabContent(
         val minute = dt.minute.toString().padStart(2, '0')
         val second = dt.second.toString().padStart(2, '0')
         "$day.$month.$year $hour:$minute:$second"
-    }.getOrDefault("${entry.timestampMs}")
+    }.getOrDefault(entry.timestampMs.toString())
 
     SelectionContainer {
         Column(

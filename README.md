@@ -160,34 +160,54 @@ val retrofit = Retrofit.Builder()
 
 ---
 
-### C. Native iOS `NSURLSession` Integration (iOS Swift / Kotlin)
-For native iOS networking (`URLSession`), use the provided logging helper in your Swift callback or `URLSession` extension:
+### C. Native iOS `NSURLSession` Integration (iOS & KMP)
+
+#### Option 1: Automated Kotlin Extension (`dataTaskWithRequestAndLog`)
+Use the `dataTaskWithRequestAndLog` extension function on `NSURLSession` in Kotlin (`iosMain`) for zero-boilerplate logging:
+
+```kotlin
+import com.ugurbuga.inspecto.dataTaskWithRequestAndLog
+
+val task = session.dataTaskWithRequestAndLog(request) { data, response, error ->
+    // Your completion handler — logging is 100% automated!
+}
+task.resume()
+```
+
+#### Option 2: Delegate Wrapper (`InspectoURLSessionDataDelegate`)
+Wrap your `NSURLSession` delegate with `InspectoURLSessionDataDelegate`:
+
+```kotlin
+import com.ugurbuga.inspecto.InspectoURLSessionDataDelegate
+
+val session = NSURLSession.sessionWithConfiguration(
+    configuration = config,
+    delegate = InspectoURLSessionDataDelegate(myExistingDelegate),
+    delegateQueue = null
+)
+```
+
+#### Option 3: Swift Native `URLProtocol` Registration
+Register `InspectoURLProtocol.self` in your Swift `iOSApp.swift` to automatically intercept all app-wide `URLSession` calls:
 
 ```swift
-import Foundation
+import SwiftUI
 import Shared
 
-extension URLSession {
-    func inspectoDataTask(
-        with request: URLRequest,
-        completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
-    ) -> URLSessionDataTask {
-        let startTime = Date().timeIntervalSince1970
-        return self.dataTask(with: request) { data, response, error in
-            let duration = Int64((Date().timeIntervalSince1970 - startTime) * 1000)
-            InspectoNSURLSessionKt.logNSURLSessionDataTask(
-                request: request as NSURLRequest,
-                response: response as? NSHTTPURLResponse,
-                data: data as NSData?,
-                error: error as NSError?,
-                durationMs: duration
-            )
-            completionHandler(data, response, error)
+@main
+struct iOSApp: App {
+    init() {
+        URLProtocol.registerClass(InspectoURLProtocol.self)
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
         }
     }
 }
 ```
-*✨ Logs native iOS network traffic with an emerald **`iOS NSURLSession`** tag.*
+*✨ Automatically intercepts and logs native iOS `NSURLSession` network traffic with an emerald **`iOS NSURLSession`** tag.*
 
 ---
 

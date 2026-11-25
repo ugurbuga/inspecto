@@ -17,6 +17,8 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
+            export(project(":inspecto-ios"))
+            export(project(":inspecto-core"))
         }
     }
     jvm()

@@ -156,7 +156,7 @@ class InspectoApolloInterceptor(
     }
 
     private fun convertKotlinToStringToJson(input: String): String {
-        var s = input.trim()
+        val s = input.trim()
         if ((s.startsWith("{") && s.endsWith("}")) || (s.startsWith("(") && s.endsWith(")"))) {
             val content = s.substring(1, s.length - 1)
             return "{${convertContentToJson(content)}}"
