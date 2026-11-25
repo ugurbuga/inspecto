@@ -46,6 +46,7 @@ import com.ugurbuga.inspecto.generated.resources.ic_search
 import com.ugurbuga.inspecto.generated.resources.no_network_calls_subtitle
 import com.ugurbuga.inspecto.generated.resources.no_network_calls_title
 import com.ugurbuga.inspecto.generated.resources.search_placeholder
+import com.ugurbuga.inspecto.ui.bottomsheets.ClearConfirmationBottomSheet
 import com.ugurbuga.inspecto.ui.bottomsheets.FilterBottomSheet
 import com.ugurbuga.inspecto.ui.bottomsheets.SortBottomSheet
 import com.ugurbuga.inspecto.ui.components.HeaderStatsTable
@@ -86,18 +87,24 @@ private fun entryMatchesFilter(entry: InspectoLogEntry, filter: String): Boolean
 internal fun InspectoScreen(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    forceDarkTheme: Boolean? = null,
     fontFamily: FontFamily? = null
 ) {
     val systemDark = isSystemInDarkTheme()
-    var isDarkThemeOverride by remember { mutableStateOf<Boolean?>(forceDarkTheme) }
-    val isDark = isDarkThemeOverride ?: systemDark
+    var themeMode by remember { mutableStateOf<Boolean?>(null) }
+    val isDark = themeMode ?: systemDark
 
     InspectoTheme(isDarkTheme = isDark, fontFamily = fontFamily ?: getInspectoFontFamily()) {
         InspectoScreenContent(
             onDismiss = onDismiss,
             isDarkTheme = isDark,
-            onToggleTheme = { isDarkThemeOverride = !isDark },
+            themeMode = themeMode,
+            onToggleTheme = {
+                themeMode = when (themeMode) {
+                    null -> false
+                    false -> true
+                    true -> null
+                }
+            },
             modifier = modifier
         )
     }
@@ -108,6 +115,7 @@ internal fun InspectoScreen(
 private fun InspectoScreenContent(
     onDismiss: () -> Unit,
     isDarkTheme: Boolean,
+    themeMode: Boolean?,
     onToggleTheme: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -121,6 +129,7 @@ private fun InspectoScreenContent(
 
     var isFilterBottomSheetOpen by remember { mutableStateOf(false) }
     var isSortBottomSheetOpen by remember { mutableStateOf(false) }
+    var isClearConfirmationOpen by remember { mutableStateOf(false) }
 
     val focusManager = androidx.compose.ui.platform.LocalFocusManager.current
     val keyboardController = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
@@ -212,6 +221,14 @@ private fun InspectoScreenContent(
         )
     }
 
+    if (isClearConfirmationOpen) {
+        ClearConfirmationBottomSheet(
+            isDarkTheme = isDarkTheme,
+            onConfirm = { Inspecto.clear() },
+            onDismiss = { isClearConfirmationOpen = false }
+        )
+    }
+
     Surface(
         modifier = modifier
             .fillMaxSize()
@@ -267,10 +284,13 @@ private fun InspectoScreenContent(
                         errorCount = errorCount,
                         avgLatency = avgLatency,
                         isDarkTheme = isDarkTheme,
+                        themeMode = themeMode,
                         isFilterActive = isFilterActive,
+                        isSearchActive = searchQuery.isNotBlank(),
                         onOpenFilter = { isFilterBottomSheetOpen = true },
                         onOpenSort = { isSortBottomSheetOpen = true },
-                        onToggleTheme = onToggleTheme
+                        onToggleTheme = onToggleTheme,
+                        onOpenClear = { isClearConfirmationOpen = true }
                     )
 
                     OutlinedTextField(
@@ -400,5 +420,5 @@ internal fun InspectoListDarkPreview() {
             tag = "Ktor"
         )
     }
-    InspectoScreen(onDismiss = {}, forceDarkTheme = true)
+    InspectoScreen(onDismiss = {})
 }

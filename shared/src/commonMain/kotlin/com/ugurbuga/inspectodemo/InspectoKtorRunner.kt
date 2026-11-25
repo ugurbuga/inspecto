@@ -54,12 +54,15 @@ object InspectoKtorRunner {
     }
 
     suspend fun triggerBadRequest400(): String {
-        val response: HttpResponse = ktorClient.get("https://httpbin.org/status/400")
+        val response: HttpResponse = ktorClient.post("https://reqres.in/api/login") {
+            contentType(ContentType.Application.Json)
+            setBody("{}")
+        }
         return "HTTP 400 Bad Request (${response.status.value})"
     }
 
     suspend fun triggerServerError500(): String {
-        val response: HttpResponse = ktorClient.get("https://httpbin.org/status/500")
+        val response: HttpResponse = ktorClient.get("https://dummyjson.com/http/500")
         return "HTTP 500 Internal Server Error (${response.status.value})"
     }
 }

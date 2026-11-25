@@ -153,21 +153,33 @@ fun App() {
                     isLoading = false
                 }
             },
+            onOkHttp400Click = {
+                isLoading = true
+                performOkHttpTestRequest("https://reqres.in/api/login") { _ ->
+                    isLoading = false
+                }
+            },
+            onOkHttp500Click = {
+                isLoading = true
+                performOkHttpTestRequest("https://dummyjson.com/http/500") { _ ->
+                    isLoading = false
+                }
+            },
             onNSURLSessionClick = {
                 isLoading = true
-                performNSURLSessionTestRequest("https://jsonplaceholder.typicode.com/posts") { _ ->
+                performNSURLSessionTestRequest("https://jsonplaceholder.typicode.com/posts", method = "GET") { _ ->
                     isLoading = false
                 }
             },
             onNSURLSession400Click = {
                 isLoading = true
-                performNSURLSessionTestRequest("https://httpbin.org/status/400") { _ ->
+                performNSURLSessionTestRequest("https://reqres.in/api/login", method = "POST", body = "{}") { _ ->
                     isLoading = false
                 }
             },
             onNSURLSession500Click = {
                 isLoading = true
-                performNSURLSessionTestRequest("https://httpbin.org/status/500") { _ ->
+                performNSURLSessionTestRequest("https://dummyjson.com/http/500", method = "GET") { _ ->
                     isLoading = false
                 }
             },
@@ -204,6 +216,8 @@ internal fun InspectoDemoContent(
     onErr400Click: () -> Unit = {},
     onErr500Click: () -> Unit = {},
     onOkHttpClick: () -> Unit = {},
+    onOkHttp400Click: () -> Unit = {},
+    onOkHttp500Click: () -> Unit = {},
     onNSURLSessionClick: () -> Unit = {},
     onNSURLSession400Click: () -> Unit = {},
     onNSURLSession500Click: () -> Unit = {},
@@ -374,54 +388,26 @@ internal fun InspectoDemoContent(
                                 modifier = Modifier.weight(1f)
                             )
                             DemoActionButton(
-                                text = "GET Posts",
-                                color = Color(0xFF0EA5E9),
-                                enabled = !isLoading,
-                                onClick = onPostsGetClick,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            DemoActionButton(
                                 text = "POST Submit",
                                 color = Color(0xFF10B981),
                                 enabled = !isLoading,
                                 onClick = onPostsPostClick,
                                 modifier = Modifier.weight(1f)
                             )
-                            DemoActionButton(
-                                text = "GET Comments",
-                                color = Color(0xFF8B5CF6),
-                                enabled = !isLoading,
-                                onClick = onCommentsClick,
-                                modifier = Modifier.weight(1f)
-                            )
                         }
-                    }
-
-                    // SECTION 2: ERROR SIMULATION
-                    CategoryCard(
-                        title = "Error Triggers & Edge Cases",
-                        icon = Icons.Default.BugReport,
-                        iconColor = Color(0xFFE11D48)
-                    ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             DemoActionButton(
-                                text = "Trigger 400 Error",
+                                text = "Ktor (400 Error)",
                                 color = Color(0xFFE11D48),
                                 enabled = !isLoading,
                                 onClick = onErr400Click,
                                 modifier = Modifier.weight(1f)
                             )
                             DemoActionButton(
-                                text = "Trigger 500 Error",
+                                text = "Ktor (500 Error)",
                                 color = Color(0xFF9333EA),
                                 enabled = !isLoading,
                                 onClick = onErr500Click,
@@ -430,59 +416,94 @@ internal fun InspectoDemoContent(
                         }
                     }
 
-                    // SECTION 3: OTHER STACKS (OkHttp, NSURLSession, Apollo)
+                    // SECTION 2: APOLLO GRAPHQL
                     CategoryCard(
-                        title = "Other Network Stacks",
+                        title = "Apollo GraphQL",
                         icon = Icons.Default.Code,
-                        iconColor = Color(0xFFF59E0B)
+                        iconColor = Color(0xFFEC4899)
                     ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            if (isOkHttpSupported) {
+                        DemoActionButton(
+                            text = "Apollo GraphQL Query",
+                            color = Color(0xFFEC4899),
+                            enabled = !isLoading,
+                            onClick = onApolloClick,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    // SECTION 3: OKHTTP / RETROFIT
+                    if (isOkHttpSupported) {
+                        CategoryCard(
+                            title = "OkHttp / Retrofit",
+                            icon = Icons.Default.Code,
+                            iconColor = Color(0xFFF59E0B)
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 DemoActionButton(
-                                    text = "OkHttp / Retrofit Request",
+                                    text = "OkHttp Request (200 OK)",
                                     color = Color(0xFFF59E0B),
                                     enabled = !isLoading,
                                     onClick = onOkHttpClick,
                                     modifier = Modifier.fillMaxWidth()
                                 )
-                            }
-                            if (isNSURLSessionSupported) {
-                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
                                     DemoActionButton(
-                                        text = "iOS NSURLSession (200 OK)",
-                                        color = Color(0xFFF59E0B),
+                                        text = "OkHttp (400 Error)",
+                                        color = Color(0xFFE11D48),
                                         enabled = !isLoading,
-                                        onClick = onNSURLSessionClick,
-                                        modifier = Modifier.fillMaxWidth()
+                                        onClick = onOkHttp400Click,
+                                        modifier = Modifier.weight(1f)
                                     )
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        DemoActionButton(
-                                            text = "iOS NSURLSession (400 Error)",
-                                            color = Color(0xFFE11D48),
-                                            enabled = !isLoading,
-                                            onClick = onNSURLSession400Click,
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                        DemoActionButton(
-                                            text = "iOS NSURLSession (500 Error)",
-                                            color = Color(0xFF9333EA),
-                                            enabled = !isLoading,
-                                            onClick = onNSURLSession500Click,
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                    }
+                                    DemoActionButton(
+                                        text = "OkHttp (500 Error)",
+                                        color = Color(0xFF9333EA),
+                                        enabled = !isLoading,
+                                        onClick = onOkHttp500Click,
+                                        modifier = Modifier.weight(1f)
+                                    )
                                 }
                             }
-                            DemoActionButton(
-                                text = "Apollo GraphQL Query",
-                                color = Color(0xFFEC4899),
-                                enabled = !isLoading,
-                                onClick = onApolloClick,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                        }
+                    }
+
+                    // SECTION 4: IOS NSURLSESSION
+                    if (isNSURLSessionSupported) {
+                        CategoryCard(
+                            title = "iOS NSURLSession",
+                            icon = Icons.Default.Code,
+                            iconColor = Color(0xFF06B6D4)
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                DemoActionButton(
+                                    text = "NSURLSession Request (200 OK)",
+                                    color = Color(0xFF06B6D4),
+                                    enabled = !isLoading,
+                                    onClick = onNSURLSessionClick,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    DemoActionButton(
+                                        text = "NSURLSession (400 Error)",
+                                        color = Color(0xFFE11D48),
+                                        enabled = !isLoading,
+                                        onClick = onNSURLSession400Click,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    DemoActionButton(
+                                        text = "NSURLSession (500 Error)",
+                                        color = Color(0xFF9333EA),
+                                        enabled = !isLoading,
+                                        onClick = onNSURLSession500Click,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                            }
                         }
                     }
 

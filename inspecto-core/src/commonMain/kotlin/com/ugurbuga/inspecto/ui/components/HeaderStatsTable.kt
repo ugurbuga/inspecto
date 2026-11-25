@@ -28,6 +28,7 @@ import com.ugurbuga.inspecto.generated.resources.ic_delete
 import com.ugurbuga.inspecto.generated.resources.ic_filter_list
 import com.ugurbuga.inspecto.generated.resources.ic_light_mode
 import com.ugurbuga.inspecto.generated.resources.ic_swap_vert
+import com.ugurbuga.inspecto.generated.resources.ic_system_mode
 import com.ugurbuga.inspecto.ui.theme.InspectoLightColorScheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -39,12 +40,17 @@ internal fun HeaderStatsTable(
     errorCount: Int,
     avgLatency: Long,
     isDarkTheme: Boolean,
+    themeMode: Boolean?,
     isFilterActive: Boolean = false,
+    isSearchActive: Boolean = false,
     onOpenFilter: () -> Unit,
     onOpenSort: () -> Unit,
     onToggleTheme: () -> Unit,
+    onOpenClear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isHighlightActive = isFilterActive || isSearchActive
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -59,7 +65,7 @@ internal fun HeaderStatsTable(
             shape = RoundedCornerShape(4.dp),
             border = BorderStroke(
                 1.dp,
-                if (isFilterActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                if (isHighlightActive) MaterialTheme.colorScheme.primary.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
             ),
             modifier = Modifier
                 .weight(1f)
@@ -86,7 +92,7 @@ internal fun HeaderStatsTable(
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
-                        if (isFilterActive) {
+                        if (isHighlightActive) {
                             Box(
                                 modifier = Modifier
                                     .size(5.dp)
@@ -119,7 +125,7 @@ internal fun HeaderStatsTable(
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF10B981)
                         )
-                        if (isFilterActive) {
+                        if (isHighlightActive) {
                             Box(
                                 modifier = Modifier
                                     .size(5.dp)
@@ -152,7 +158,7 @@ internal fun HeaderStatsTable(
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFFEF4444)
                         )
-                        if (isFilterActive) {
+                        if (isHighlightActive) {
                             Box(
                                 modifier = Modifier
                                     .size(5.dp)
@@ -185,7 +191,7 @@ internal fun HeaderStatsTable(
                             fontWeight = FontWeight.Medium,
                             color = if (isDarkTheme) Color(0xFF38BDF8) else Color(0xFF0284C7)
                         )
-                        if (isFilterActive) {
+                        if (isHighlightActive) {
                             Box(
                                 modifier = Modifier
                                     .size(5.dp)
@@ -207,8 +213,17 @@ internal fun HeaderStatsTable(
         val iconButtonBg = if (isDarkTheme) Color(0xFF1E293B) else MaterialTheme.colorScheme.primaryContainer
         val filterTint = if (isDarkTheme) Color(0xFF38BDF8) else Color(0xFF0284C7) // Blue
         val sortTint = if (isDarkTheme) Color(0xFF34D399) else Color(0xFF059669) // Emerald / Teal
-        val themeTint = if (isDarkTheme) Color(0xFFFBBF24) else Color(0xFFD97706) // Amber / Yellow
+        val themeTint = when (themeMode) {
+            null -> Color.Unspecified
+            else -> if (isDarkTheme) Color(0xFFFBBF24) else Color(0xFFD97706)
+        }
         val clearTint = if (isDarkTheme) Color(0xFFF87171) else Color(0xFFE11D48) // Rose / Red
+
+        val themeIcon = when (themeMode) {
+            null -> Res.drawable.ic_system_mode
+            false -> Res.drawable.ic_light_mode
+            true -> Res.drawable.ic_dark_mode
+        }
 
         Column(
             modifier = Modifier.fillMaxHeight(),
@@ -234,7 +249,7 @@ internal fun HeaderStatsTable(
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
-                            painter = painterResource(if (isDarkTheme) Res.drawable.ic_light_mode else Res.drawable.ic_dark_mode),
+                            painter = painterResource(themeIcon),
                             contentDescription = "Toggle Theme",
                             tint = themeTint,
                             modifier = Modifier.size(18.dp)
@@ -242,7 +257,7 @@ internal fun HeaderStatsTable(
                     }
                 }
                 Surface(
-                    onClick = { Inspecto.clear() },
+                    onClick = onOpenClear,
                     shape = RoundedCornerShape(4.dp),
                     color = if (isDarkTheme) Color(0xFF7F1D1D).copy(alpha = 0.3f) else Color(0xFFFEF2F2),
                     border = BorderStroke(1.dp, clearTint.copy(alpha = 0.4f)),
@@ -332,10 +347,13 @@ internal fun HeaderStatsTablePreview() {
                 errorCount = 3,
                 avgLatency = 145L,
                 isDarkTheme = false,
+                themeMode = null,
                 isFilterActive = true,
+                isSearchActive = false,
                 onOpenFilter = {},
                 onOpenSort = {},
-                onToggleTheme = {}
+                onToggleTheme = {},
+                onOpenClear = {}
             )
         }
     }

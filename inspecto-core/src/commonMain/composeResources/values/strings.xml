@@ -103,4 +103,12 @@
     <string name="copied_curl_command">cURL command copied!</string>
     <string name="copied_request_url">Request URL copied!</string>
     <string name="opening_share_sheet">Opening share sheet...</string>
+
+    <!-- ======================================== -->
+    <!-- Clear Confirmation Bottom Sheet         -->
+    <!-- ======================================== -->
+    <string name="clear_all_logs">Clear All Logs</string>
+    <string name="clear_logs_confirmation_message">Are you sure you want to clear all captured network logs? This action cannot be undone.</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
 </resources>

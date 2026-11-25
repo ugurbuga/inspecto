@@ -7,12 +7,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import com.ugurbuga.inspecto.ui.theme.InspectoFontManager
 
 @Composable
 fun InspectoOverlay(
     fontFamily: FontFamily? = null,
     content: @Composable () -> Unit
 ) {
+    if (fontFamily != null) {
+        InspectoFontManager.fontFamily = fontFamily
+    }
     val isOpen by Inspecto.isInspectoOpen.collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         content()

@@ -5,6 +5,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -48,34 +49,37 @@ val InspectoDarkColorScheme = darkColorScheme(
 @Composable
 internal fun InspectoTheme(
     isDarkTheme: Boolean,
-    fontFamily: FontFamily = getInspectoFontFamily(),
+    fontFamily: FontFamily? = null,
     content: @Composable () -> Unit
 ) {
+    val effectiveFontFamily = fontFamily ?: InspectoFontManager.fontFamily ?: getInspectoFontFamily()
     val colorScheme = if (isDarkTheme) InspectoDarkColorScheme else InspectoLightColorScheme
 
     SetStatusBarIconColor(darkIcons = !isDarkTheme)
 
     val customTypography = Typography(
-        displayLarge = TextStyle(fontFamily = fontFamily),
-        displayMedium = TextStyle(fontFamily = fontFamily),
-        displaySmall = TextStyle(fontFamily = fontFamily),
-        headlineLarge = TextStyle(fontFamily = fontFamily),
-        headlineMedium = TextStyle(fontFamily = fontFamily),
-        headlineSmall = TextStyle(fontFamily = fontFamily),
-        titleLarge = TextStyle(fontFamily = fontFamily),
-        titleMedium = TextStyle(fontFamily = fontFamily),
-        titleSmall = TextStyle(fontFamily = fontFamily),
-        bodyLarge = TextStyle(fontFamily = fontFamily),
-        bodyMedium = TextStyle(fontFamily = fontFamily),
-        bodySmall = TextStyle(fontFamily = fontFamily),
-        labelLarge = TextStyle(fontFamily = fontFamily),
-        labelMedium = TextStyle(fontFamily = fontFamily),
-        labelSmall = TextStyle(fontFamily = fontFamily)
+        displayLarge = TextStyle(fontFamily = effectiveFontFamily),
+        displayMedium = TextStyle(fontFamily = effectiveFontFamily),
+        displaySmall = TextStyle(fontFamily = effectiveFontFamily),
+        headlineLarge = TextStyle(fontFamily = effectiveFontFamily),
+        headlineMedium = TextStyle(fontFamily = effectiveFontFamily),
+        headlineSmall = TextStyle(fontFamily = effectiveFontFamily),
+        titleLarge = TextStyle(fontFamily = effectiveFontFamily),
+        titleMedium = TextStyle(fontFamily = effectiveFontFamily),
+        titleSmall = TextStyle(fontFamily = effectiveFontFamily),
+        bodyLarge = TextStyle(fontFamily = effectiveFontFamily),
+        bodyMedium = TextStyle(fontFamily = effectiveFontFamily),
+        bodySmall = TextStyle(fontFamily = effectiveFontFamily),
+        labelLarge = TextStyle(fontFamily = effectiveFontFamily),
+        labelMedium = TextStyle(fontFamily = effectiveFontFamily),
+        labelSmall = TextStyle(fontFamily = effectiveFontFamily)
     )
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = customTypography,
-        content = content
-    )
+    CompositionLocalProvider(LocalInspectoFontFamily provides effectiveFontFamily) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = customTypography,
+            content = content
+        )
+    }
 }
