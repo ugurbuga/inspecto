@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.ugurbuga"
-version = "1.0.0-alpha19"
+version = "1.0.0-alpha20"
 
 kotlin {
     jvm()
@@ -37,7 +37,7 @@ kotlin {
 }
 
 mavenPublishing {
-    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha19")
+    coordinates("io.github.ugurbuga", "inspecto-okhttp", "1.0.0-alpha20")
 
     pom {
         name.set("Inspecto OkHttp")
