@@ -171,6 +171,16 @@ fun App() {
                     isLoading = false
                 }
             },
+            onNSURLSessionDelegateClick = {
+                isLoading = true
+                performNSURLSessionDelegateTestRequest(
+                    url = "https://jsonplaceholder.typicode.com/posts",
+                    method = "POST",
+                    body = "{\"title\": \"Inspecto iOS Delegate Test\", \"body\": \"Testing InspectoURLSessionDataDelegate\", \"userId\": 1}"
+                ) { _ ->
+                    isLoading = false
+                }
+            },
             onNSURLSession400Click = {
                 isLoading = true
                 performNSURLSessionTestRequest("https://reqres.in/api/login", method = "POST", body = "{}") { _ ->
@@ -219,6 +229,7 @@ internal fun InspectoDemoContent(
     onOkHttp400Click: () -> Unit = {},
     onOkHttp500Click: () -> Unit = {},
     onNSURLSessionClick: () -> Unit = {},
+    onNSURLSessionDelegateClick: () -> Unit = {},
     onNSURLSession400Click: () -> Unit = {},
     onNSURLSession500Click: () -> Unit = {},
     onApolloClick: () -> Unit = {},
@@ -478,10 +489,17 @@ internal fun InspectoDemoContent(
                         ) {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 DemoActionButton(
-                                    text = "NSURLSession Request (200 OK)",
+                                    text = "NSURLSession GET (Completion Handler)",
                                     color = Color(0xFF06B6D4),
                                     enabled = !isLoading,
                                     onClick = onNSURLSessionClick,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                DemoActionButton(
+                                    text = "NSURLSession POST (Data Delegate)",
+                                    color = Color(0xFF0891B2),
+                                    enabled = !isLoading,
+                                    onClick = onNSURLSessionDelegateClick,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 Row(

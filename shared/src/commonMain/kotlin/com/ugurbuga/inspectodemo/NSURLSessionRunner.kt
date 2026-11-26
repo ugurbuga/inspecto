@@ -6,4 +6,12 @@ expect fun performNSURLSessionTestRequest(
     body: String? = null,
     onResult: (String) -> Unit
 )
+
+expect fun performNSURLSessionDelegateTestRequest(
+    url: String,
+    method: String = "GET",
+    body: String? = null,
+    onResult: (String) -> Unit
+)
+
 expect val isNSURLSessionSupported: Boolean

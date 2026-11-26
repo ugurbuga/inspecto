@@ -9,3 +9,20 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.mavenPublish) apply false
 }
+
+subprojects {
+    if (name.startsWith("inspecto-")) {
+        group = rootProject.property("INSPECTO_GROUP") as String
+        version = rootProject.property("INSPECTO_VERSION") as String
+
+        plugins.withId("com.vanniktech.maven.publish") {
+            configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
+                coordinates(
+                    rootProject.property("INSPECTO_GROUP") as String,
+                    name,
+                    rootProject.property("INSPECTO_VERSION") as String
+                )
+            }
+        }
+    }
+}

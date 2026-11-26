@@ -3,7 +3,7 @@
 [![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin_Multiplatform-KMP-blue?logo=kotlin)](https://kotlinlang.org/docs/multiplatform.html)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose_Multiplatform-CMP-purple?logo=jetbrains)](https://www.jetbrains.com/lp/compose-multiplatform/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![GitHub Packages](https://img.shields.io/badge/GitHub_Packages-v1.0.0--alpha20-orange)](https://github.com/ugurbuga/inspecto/packages)
+[![GitHub Packages](https://img.shields.io/badge/GitHub_Packages-v1.0.0--alpha21-orange)](https://github.com/ugurbuga/inspecto/packages)
 
 **Inspecto** is a lightweight, modular, cross-platform network and event inspection library built specifically for **Kotlin Multiplatform (KMP)** and Jetpack Compose (Android, iOS, Desktop JVM, Web JS/WasmJS).
 
@@ -15,6 +15,8 @@ Inspired by Chucker, **Inspecto** enables real-time in-app inspection for HTTP a
 - **⚡ Zero-Config Android Setup**: Automatically captures context on startup via `InspectoInitProvider`—no `Application` subclassing or `MainActivity` code modifications required.
 - **📱 In-App Overlay (`InspectoOverlay`)**: Renders directly inside your Compose app on all platforms with back gesture/button navigation.
 - **🎨 Beautiful Developer Experience**: Real-time HTTP & Apollo GraphQL interceptors, JSON syntax highlighting, in-page search, word wrap / horizontal scroll toggling, cURL command export, and smart multi-field filtering.
+- **🌗 3-Way Theme Toggle & Custom Fonts**: Seamless switching between System, Light, and Dark modes (with dual-tone sun/moon system icon) and global custom font inheritance via `InspectoFontManager`.
+- **🛡️ Safe Clear Confirmation**: Built-in confirmation bottom sheet with localized strings for safely clearing captured logs.
 
 ---
 
@@ -70,16 +72,16 @@ Add Inspecto dependencies to your multiplatform module (`commonMain` & `iosMain`
 ```kotlin
 commonMain.dependencies {
     // Core UI, models & storage (Required)
-    implementation("io.github.ugurbuga:inspecto-core:1.0.0-alpha20")
+    implementation("io.github.ugurbuga:inspecto-core:1.0.0-alpha21")
 
     // Optional Network Add-ons (Add only what you use)
-    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha20")
-    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha20")
-    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha20")
+    implementation("io.github.ugurbuga:inspecto-ktor:1.0.0-alpha21")
+    implementation("io.github.ugurbuga:inspecto-okhttp:1.0.0-alpha21")
+    implementation("io.github.ugurbuga:inspecto-apollo:1.0.0-alpha21")
 }
 
 iosMain.dependencies {
-    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha20")
+    implementation("io.github.ugurbuga:inspecto-ios:1.0.0-alpha21")
 }
 ```
 

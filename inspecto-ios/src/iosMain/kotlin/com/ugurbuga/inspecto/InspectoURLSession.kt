@@ -5,6 +5,10 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.*
 import platform.darwin.NSObject
 
+private const val DEFAULT_HTTP_METHOD = "GET"
+private const val DEFAULT_ERROR_STATUS_CODE = 0
+private const val DEFAULT_SUCCESS_STATUS_CODE = 200
+
 /**
  * Extension functions and helpers for automatic NSURLSession logging in Inspecto.
  */
@@ -14,8 +18,8 @@ fun NSURLSession.dataTaskWithRequestAndLog(
     onComplete: (NSData?, NSURLResponse?, NSError?) -> Unit
 ): NSURLSessionDataTask {
     val startTime = NSDate().timeIntervalSince1970
-    val url = request.URL?.absoluteString ?: ""
-    val method = request.HTTPMethod ?: "GET"
+    val url = request.URL?.absoluteString.orEmpty()
+    val method = request.HTTPMethod ?: DEFAULT_HTTP_METHOD
 
     val reqHeaders = (request.allHTTPHeaderFields as? Map<*, *>)?.entries?.associate {
         it.key.toString() to it.value.toString()
@@ -23,19 +27,13 @@ fun NSURLSession.dataTaskWithRequestAndLog(
 
     val reqBodyString = request.HTTPBody?.let { data ->
         NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
-    }
+    }.orEmpty()
 
     return dataTaskWithRequest(request) { data: NSData?, response: NSURLResponse?, error: NSError? ->
         val duration = ((NSDate().timeIntervalSince1970 - startTime) * 1000).toLong()
         val httpResponse = response as? NSHTTPURLResponse
 
-        val inferredCode = when {
-            url.contains("400") -> 400
-            url.contains("500") -> 500
-            url.contains("404") -> 404
-            else -> 0
-        }
-        val statusCode = httpResponse?.statusCode?.toInt() ?: if (error != null) inferredCode else 200
+        val statusCode = httpResponse?.statusCode?.toInt() ?: if (error != null) DEFAULT_ERROR_STATUS_CODE else DEFAULT_SUCCESS_STATUS_CODE
 
         val resHeaders = (httpResponse?.allHeaderFields as? Map<*, *>)?.entries?.associate {
             it.key.toString() to it.value.toString()
@@ -43,7 +41,7 @@ fun NSURLSession.dataTaskWithRequestAndLog(
 
         val resBodyString = data?.let { d ->
             NSString.create(data = d, encoding = NSUTF8StringEncoding)?.toString()
-        } ?: if (error != null) "Error: ${error.localizedDescription}" else ""
+        }.orEmpty().ifEmpty { if (error != null) "Error: ${error.localizedDescription}" else "" }
 
         Inspecto.addLog(
             url = url,
@@ -102,8 +100,8 @@ class InspectoURLSessionDataDelegate(
     ) {
         val duration = ((NSDate().timeIntervalSince1970 - startTime) * 1000).toLong()
         val request = task.originalRequest ?: task.currentRequest
-        val url = request?.URL?.absoluteString ?: ""
-        val method = request?.HTTPMethod ?: "GET"
+        val url = request?.URL?.absoluteString.orEmpty()
+        val method = request?.HTTPMethod ?: DEFAULT_HTTP_METHOD
 
         val reqHeaders = (request?.allHTTPHeaderFields as? Map<*, *>)?.entries?.associate {
             it.key.toString() to it.value.toString()
@@ -115,19 +113,13 @@ class InspectoURLSessionDataDelegate(
 
         val reqBodyString = request?.HTTPBody?.let { data ->
             NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
-        }
+        }.orEmpty()
 
-        val inferredCode = when {
-            url.contains("400") -> 400
-            url.contains("500") -> 500
-            url.contains("404") -> 404
-            else -> 0
-        }
-        val statusCode = httpResponse?.statusCode?.toInt() ?: if (didCompleteWithError != null) inferredCode else 200
+        val statusCode = httpResponse?.statusCode?.toInt() ?: if (didCompleteWithError != null) DEFAULT_ERROR_STATUS_CODE else DEFAULT_SUCCESS_STATUS_CODE
 
         val resBodyString = responseData?.let { data ->
             NSString.create(data = data, encoding = NSUTF8StringEncoding)?.toString()
-        } ?: if (didCompleteWithError != null) "Error: ${didCompleteWithError.localizedDescription}" else ""
+        }.orEmpty().ifEmpty { if (didCompleteWithError != null) "Error: ${didCompleteWithError.localizedDescription}" else "" }
 
         Inspecto.addLog(
             url = url,
