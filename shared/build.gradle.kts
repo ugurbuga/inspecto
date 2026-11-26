@@ -52,7 +52,7 @@ kotlin {
     }
     sourceSets {
         androidMain.dependencies {
-            api(compose.uiTooling)
+            api(libs.compose.uiTooling)
             api(libs.compose.uiToolingPreview)
             api(libs.androidx.activity.compose)
             api(libs.ktor.client.cio)
@@ -63,13 +63,13 @@ kotlin {
             api(project(":inspecto-ktor"))
             api(project(":inspecto-okhttp"))
             api(project(":inspecto-apollo"))
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.materialIconsExtended)
-            api(compose.ui)
+            api(libs.compose.runtime)
+            api(libs.compose.foundation)
+            api(libs.compose.material3)
+            api(libs.compose.material.icons.extended)
+            api(libs.compose.ui)
             api(libs.compose.uiToolingPreview)
-            api(compose.components.resources)
+            api(libs.compose.components.resources)
             api(libs.androidx.lifecycle.viewmodelCompose)
             api(libs.androidx.lifecycle.runtimeCompose)
             api(libs.kotlinx.serialization.json)
@@ -87,7 +87,7 @@ kotlin {
             api(libs.ktor.client.darwin)
         }
         jvmMain.dependencies {
-            api(compose.uiTooling)
+            api(libs.compose.uiTooling)
             api(libs.compose.uiToolingPreview)
             api(libs.ktor.client.cio)
             api(libs.okhttp)
