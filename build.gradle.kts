@@ -12,17 +12,7 @@ plugins {
 
 subprojects {
     if (name.startsWith("inspecto-")) {
-        group = rootProject.property("INSPECTO_GROUP") as String
-        version = rootProject.property("INSPECTO_VERSION") as String
-
-        plugins.withId("com.vanniktech.maven.publish") {
-            configure<com.vanniktech.maven.publish.MavenPublishBaseExtension> {
-                coordinates(
-                    rootProject.property("INSPECTO_GROUP") as String,
-                    name,
-                    rootProject.property("INSPECTO_VERSION") as String
-                )
-            }
-        }
+        group = findProperty("INSPECTO_GROUP")?.toString() ?: "io.github.ugurbuga"
+        version = findProperty("INSPECTO_VERSION")?.toString() ?: "1.0.0-alpha21"
     }
 }

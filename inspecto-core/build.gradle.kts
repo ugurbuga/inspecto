@@ -1,5 +1,8 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.idea.proto.com.google.protobuf.api
+import org.jetbrains.kotlin.gradle.internal.platform.wasm.WasmPlatforms.wasmJs
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -50,7 +53,7 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             api(libs.androidx.activity.compose)
-            api(compose.uiTooling)
+            api(libs.compose.uiTooling)
             api(libs.compose.uiToolingPreview)
             compileOnly(libs.okhttp)
         }
@@ -58,11 +61,11 @@ kotlin {
             compileOnly(libs.okhttp)
         }
         commonMain.dependencies {
-            api(compose.components.resources)
-            api(compose.runtime)
-            api(compose.foundation)
-            api(compose.material3)
-            api(compose.ui)
+            api(libs.compose.components.resources)
+            api(libs.compose.runtime)
+            api(libs.compose.foundation)
+            api(libs.compose.material3)
+            api(libs.compose.ui)
             api(libs.compose.uiToolingPreview)
             api(libs.androidx.lifecycle.viewmodelCompose)
             api(libs.androidx.lifecycle.runtimeCompose)
@@ -75,7 +78,7 @@ kotlin {
 }
 
 dependencies {
-    androidRuntimeClasspath(compose.uiTooling)
+    androidRuntimeClasspath(libs.compose.uiTooling)
 }
 
 mavenPublishing {
