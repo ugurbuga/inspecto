@@ -189,28 +189,6 @@ val session = NSURLSession.sessionWithConfiguration(
 )
 ```
 
-#### Option 3: Swift Native `URLProtocol` Registration
-Register `InspectoURLProtocol.self` in your Swift `iOSApp.swift` to automatically intercept all app-wide `URLSession` calls:
-
-```swift
-import SwiftUI
-import Shared
-
-@main
-struct iOSApp: App {
-    init() {
-        URLProtocol.registerClass(InspectoURLProtocol.self)
-    }
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
-```
-*✨ Automatically intercepts and logs native iOS `NSURLSession` network traffic with an emerald **`iOS NSURLSession`** tag.*
-
 ---
 
 ### D. Apollo Kotlin GraphQL Integration (Cross-Platform)
